@@ -279,3 +279,22 @@ describe('Source Control view', () => {
     expect(screen.getByRole('button', { name: 'Retry' })).toBeInTheDocument()
   })
 })
+
+describe('Page metadata', () => {
+  it('browser title and description follow the open file', async () => {
+    renderAt('/about')
+    expect(document.title).toBe('About — Joenel F. Sevellejo')
+    await userEvent.click(item('contact.md'))
+    expect(document.title).toBe('Contact — Joenel F. Sevellejo')
+    expect(document.head.querySelector('link[rel="canonical"]')?.getAttribute('href')).toMatch(
+      /\/contact$/,
+    )
+  })
+
+  it('unknown urls are not indexed', () => {
+    renderAt('/foo')
+    expect(document.head.querySelector('meta[name="robots"]')?.getAttribute('content')).toBe(
+      'noindex',
+    )
+  })
+})

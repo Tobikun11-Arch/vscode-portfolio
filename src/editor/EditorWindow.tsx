@@ -3,6 +3,7 @@ import { useLocation } from 'react-router'
 import type { FileId } from '../files'
 import { PAGE_IMAGES } from '../pages/registry'
 import { preloadImages } from '../preload'
+import { applyPageMeta, metaFor, NOT_FOUND_META } from '../seo/seo'
 import { useEditorTabs } from '../tabs/useEditorTabs'
 import { ActivityBar } from './ActivityBar'
 import { GitGraphPanel } from './GitGraphPanel'
@@ -30,6 +31,13 @@ export function EditorWindow() {
   useEffect(() => {
     preloadImages(PAGE_IMAGES)
   }, [])
+
+  // Browser title + SEO/social tags follow the open file.
+  useEffect(() => {
+    if (status === 'file' && activeId) applyPageMeta(metaFor(activeId))
+    else if (status === 'empty') applyPageMeta({ ...NOT_FOUND_META, title: 'Joenel-Portfolio' })
+    else applyPageMeta(NOT_FOUND_META)
+  }, [status, activeId])
 
   // Any navigation (file click, Back/Forward, links in a page) closes the phone drawer.
   const [drawerPath, setDrawerPath] = useState(pathname)
