@@ -1,6 +1,6 @@
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { MemoryRouter } from 'react-router'
+import { MemoryRouter, useNavigate } from 'react-router'
 import { describe, expect, it } from 'vitest'
 import App from '../App'
 import { FILES } from '../files'
@@ -13,6 +13,12 @@ const renderAt = (path = '/') =>
     </MemoryRouter>,
   )
 
+function BackButton() {
+  const navigate = useNavigate()
+  return <button onClick={() => navigate(-1)}>test back</button>
+}
+
+const explorer = () => screen.getByRole('navigation', { name: 'Explorer' })
 const tree = () => screen.getByRole('tree')
 const item = (name: string) => within(tree()).getByRole('treeitem', { name })
 
@@ -121,6 +127,45 @@ describe('EditorWindow (desktop)', () => {
     screen.getByRole('button', { name: 'Joenel-Portfolio' }).focus()
     await userEvent.keyboard('{Enter}')
     expect(tree()).toBeInTheDocument()
+  })
+
+  it('hamburger opens the drawer', async () => {
+    renderAt()
+    await userEvent.click(screen.getByRole('button', { name: 'Open explorer' }))
+    expect(explorer()).toHaveClass('is-drawer-open')
+  })
+
+  it('drawer closes on navigation', async () => {
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <App />
+        <BackButton />
+      </MemoryRouter>,
+    )
+    await userEvent.click(screen.getByRole('button', { name: 'Open explorer' }))
+    await userEvent.click(item('about.md'))
+    expect(explorer()).not.toHaveClass('is-drawer-open')
+
+    await userEvent.click(screen.getByRole('button', { name: 'Open explorer' }))
+    expect(explorer()).toHaveClass('is-drawer-open')
+    await userEvent.click(screen.getByRole('button', { name: 'test back' }))
+    expect(screen.getByRole('heading', { level: 1, name: /joenel/i })).toBeInTheDocument()
+    expect(explorer()).not.toHaveClass('is-drawer-open')
+  })
+
+  it('backdrop closes the drawer', async () => {
+    renderAt()
+    await userEvent.click(screen.getByRole('button', { name: 'Open explorer' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Close explorer' }))
+    expect(explorer()).not.toHaveClass('is-drawer-open')
+    expect(screen.queryByRole('button', { name: 'Close explorer' })).not.toBeInTheDocument()
+  })
+
+  it('choosing the already-open file still closes the drawer', async () => {
+    renderAt()
+    await userEvent.click(screen.getByRole('button', { name: 'Open explorer' }))
+    await userEvent.click(item('home.tsx'))
+    expect(explorer()).not.toHaveClass('is-drawer-open')
   })
 
   it('title bar shows the project name and never the VS Code name', () => {

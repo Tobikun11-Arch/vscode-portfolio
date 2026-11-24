@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import { useLocation } from 'react-router'
+import type { FileId } from '../files'
 import { PAGE_IMAGES } from '../pages/registry'
 import { preloadImages } from '../preload'
 import { useEditorTabs } from '../tabs/useEditorTabs'
@@ -18,12 +20,23 @@ export function EditorWindow() {
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [windowState, setWindowState] = useState<WindowState>('normal')
 
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const { pathname } = useLocation()
+
   useEffect(() => {
     preloadImages(PAGE_IMAGES)
   }, [])
 
-  const noop = () => {}
+  // Any navigation (file click, Back/Forward, links in a page) closes the phone drawer.
+  useEffect(() => {
+    setDrawerOpen(false)
+  }, [pathname])
+
   const hide = () => setWindowState('hidden')
+  const openFromExplorer = (id: FileId) => {
+    setDrawerOpen(false)
+    open(id)
+  }
 
   if (windowState === 'hidden') {
     return (
@@ -43,7 +56,7 @@ export function EditorWindow() {
         aria-label="Joenel-Portfolio editor"
       >
         <TitleBar
-          onToggleDrawer={noop}
+          onToggleDrawer={() => setDrawerOpen((v) => !v)}
           onMinimize={hide}
           onMaximize={() => setWindowState(maximized ? 'normal' : 'maximized')}
           onClose={hide}
@@ -54,7 +67,21 @@ export function EditorWindow() {
             explorerOpen={sidebarOpen}
             onToggleExplorer={() => setSidebarOpen((v) => !v)}
           />
-          {sidebarOpen && <Explorer activeId={activeId} onOpen={open} />}
+          {(sidebarOpen || drawerOpen) && (
+            <Explorer
+              activeId={activeId}
+              onOpen={openFromExplorer}
+              className={drawerOpen ? 'is-drawer-open' : ''}
+            />
+          )}
+          {drawerOpen && (
+            <button
+              type="button"
+              className="drawer-backdrop"
+              aria-label="Close explorer"
+              onClick={() => setDrawerOpen(false)}
+            />
+          )}
           <div className="editor-pane">
             <TabBar tabs={tabs} activeId={activeId} onSelect={open} onClose={close} />
             <EditorArea status={status} activeId={activeId} />

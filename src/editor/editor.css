@@ -454,3 +454,100 @@
 .status-bar__spacer {
   flex: 1;
 }
+
+.drawer-backdrop {
+  display: none;
+}
+
+/* Tablet / small laptop: drop decorative title-bar bits so nothing collides */
+@media (max-width: 1000px) {
+  .title-bar__nav,
+  .title-bar__layout {
+    display: none;
+  }
+}
+
+/* ---------- Phone: full-screen editor + explorer drawer ---------- */
+@media (max-width: 767px) {
+  .window,
+  .window.is-maximized {
+    position: fixed;
+    inset: 0;
+    width: auto;
+    height: auto;
+    grid-template-rows: 44px minmax(0, 1fr);
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .title-bar {
+    height: 44px;
+    padding-left: 4px;
+  }
+
+  .title-bar__drawer-btn {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+  }
+
+  .title-bar__menu,
+  .title-bar__nav,
+  .title-bar__layout,
+  .title-bar__controls,
+  .activity-bar,
+  .status-bar {
+    display: none;
+  }
+
+  .title-bar__center {
+    justify-content: flex-start;
+    padding-right: 10px;
+  }
+
+  .title-bar__search {
+    width: 100%;
+  }
+
+  .window__body {
+    position: relative;
+  }
+
+  .explorer {
+    position: absolute;
+    inset: 0 auto 0 0;
+    z-index: 2;
+    width: min(280px, 82vw);
+    transform: translateX(-100%);
+    visibility: hidden;
+    transition:
+      transform 0.2s ease,
+      visibility 0s linear 0.2s;
+  }
+
+  .explorer.is-drawer-open {
+    transform: translateX(0);
+    visibility: visible;
+    transition: transform 0.2s ease;
+    box-shadow: 8px 0 24px rgba(0, 0, 0, 0.4);
+  }
+
+  .tree-row {
+    height: 36px;
+  }
+
+  .drawer-backdrop {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: rgba(0, 0, 0, 0.45);
+    cursor: default;
+  }
+
+  .tab__close {
+    visibility: visible;
+  }
+}
