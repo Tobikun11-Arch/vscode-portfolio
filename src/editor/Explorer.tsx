@@ -6,7 +6,6 @@ import { FileIcon } from './FileIcon'
 interface ExplorerProps {
   activeId: FileId | null
   onOpen(id: FileId): void
-  className?: string
 }
 
 const activate = (event: KeyboardEvent, action: () => void) => {
@@ -16,7 +15,7 @@ const activate = (event: KeyboardEvent, action: () => void) => {
   }
 }
 
-export function Explorer({ activeId, onOpen, className = '' }: ExplorerProps) {
+export function Explorer({ activeId, onOpen }: ExplorerProps) {
   const [collapsed, setCollapsed] = useState<Set<string>>(() => new Set())
 
   const toggle = (name: string) =>
@@ -81,7 +80,7 @@ export function Explorer({ activeId, onOpen, className = '' }: ExplorerProps) {
 
   const root: FolderNode = FILE_TREE
   return (
-    <nav className={`explorer ${className}`.trim()} aria-label="Explorer">
+    <nav className="explorer" aria-label="Explorer">
       <div className="explorer__title">EXPLORER</div>
       <div className="explorer__root">
         <ChevronDown size={14} aria-hidden="true" />

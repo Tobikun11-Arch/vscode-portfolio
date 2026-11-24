@@ -1,7 +1,7 @@
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, useNavigate } from 'react-router'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import App from '../App'
 import { FILES } from '../files'
 import { saveTabs } from '../tabs/tabsModel'
@@ -18,7 +18,7 @@ function BackButton() {
   return <button onClick={() => navigate(-1)}>test back</button>
 }
 
-const explorer = () => screen.getByRole('navigation', { name: 'Explorer' })
+const sidebar = () => screen.getByRole('complementary', { name: 'Side bar' })
 const tree = () => screen.getByRole('tree')
 const item = (name: string) => within(tree()).getByRole('treeitem', { name })
 
@@ -132,7 +132,7 @@ describe('EditorWindow (desktop)', () => {
   it('hamburger opens the drawer', async () => {
     renderAt()
     await userEvent.click(screen.getByRole('button', { name: 'Open explorer' }))
-    expect(explorer()).toHaveClass('is-drawer-open')
+    expect(sidebar()).toHaveClass('is-drawer-open')
   })
 
   it('drawer closes on navigation', async () => {
@@ -144,20 +144,20 @@ describe('EditorWindow (desktop)', () => {
     )
     await userEvent.click(screen.getByRole('button', { name: 'Open explorer' }))
     await userEvent.click(item('about.md'))
-    expect(explorer()).not.toHaveClass('is-drawer-open')
+    expect(sidebar()).not.toHaveClass('is-drawer-open')
 
     await userEvent.click(screen.getByRole('button', { name: 'Open explorer' }))
-    expect(explorer()).toHaveClass('is-drawer-open')
+    expect(sidebar()).toHaveClass('is-drawer-open')
     await userEvent.click(screen.getByRole('button', { name: 'test back' }))
     expect(screen.getByRole('heading', { level: 1, name: /joenel/i })).toBeInTheDocument()
-    expect(explorer()).not.toHaveClass('is-drawer-open')
+    expect(sidebar()).not.toHaveClass('is-drawer-open')
   })
 
   it('backdrop closes the drawer', async () => {
     renderAt()
     await userEvent.click(screen.getByRole('button', { name: 'Open explorer' }))
     await userEvent.click(screen.getByRole('button', { name: 'Close explorer' }))
-    expect(explorer()).not.toHaveClass('is-drawer-open')
+    expect(sidebar()).not.toHaveClass('is-drawer-open')
     expect(screen.queryByRole('button', { name: 'Close explorer' })).not.toBeInTheDocument()
   })
 
@@ -165,7 +165,7 @@ describe('EditorWindow (desktop)', () => {
     renderAt()
     await userEvent.click(screen.getByRole('button', { name: 'Open explorer' }))
     await userEvent.click(item('home.tsx'))
-    expect(explorer()).not.toHaveClass('is-drawer-open')
+    expect(sidebar()).not.toHaveClass('is-drawer-open')
   })
 
   it('scrolls the newly active tab into view', async () => {
@@ -187,5 +187,95 @@ describe('EditorWindow (desktop)', () => {
     const { container } = renderAt()
     expect(screen.getByText('Joenel-Portfolio')).toBeInTheDocument()
     expect(container.textContent).not.toContain('Visual Studio Code')
+  })
+})
+
+describe('Search view', () => {
+  it('search icon opens search and lists every file that mentions my name', async () => {
+    renderAt()
+    await userEvent.click(screen.getByRole('button', { name: 'Search' }))
+    await userEvent.type(screen.getByRole('searchbox'), 'joenel')
+    for (const name of ['home.tsx', 'about.md', 'contact.md']) {
+      expect(screen.getByRole('group', { name })).toBeInTheDocument()
+    }
+    expect(screen.getByText(/results? in \d+ files?/i)).toBeInTheDocument()
+  })
+
+  it('clicking a match opens that file', async () => {
+    renderAt()
+    await userEvent.click(screen.getByRole('button', { name: 'Search' }))
+    await userEvent.type(screen.getByRole('searchbox'), 'Medianeth')
+    const group = screen.getByRole('group', { name: 'experience.md' })
+    await userEvent.click(within(group).getAllByRole('button')[0])
+    expect(screen.getByRole('heading', { level: 1, name: /experience/i })).toBeInTheDocument()
+  })
+
+  it('says when nothing matches', async () => {
+    renderAt()
+    await userEvent.click(screen.getByRole('button', { name: 'Search' }))
+    await userEvent.type(screen.getByRole('searchbox'), 'kubernetes-xyz')
+    expect(screen.getByText('No results found.')).toBeInTheDocument()
+  })
+
+  it('switching views keeps the sidebar open', async () => {
+    renderAt()
+    await userEvent.click(screen.getByRole('button', { name: 'Search' }))
+    expect(screen.queryByRole('tree')).not.toBeInTheDocument()
+    expect(screen.getByRole('searchbox')).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: 'Search' }))
+    expect(screen.queryByRole('searchbox')).not.toBeInTheDocument()
+  })
+
+  it('phone drawer can switch to search', async () => {
+    renderAt()
+    await userEvent.click(screen.getByRole('button', { name: 'Open explorer' }))
+    await userEvent.click(within(sidebar()).getByRole('button', { name: 'Show Search' }))
+    expect(screen.getByRole('searchbox')).toBeInTheDocument()
+    expect(sidebar()).toHaveClass('is-drawer-open')
+  })
+})
+
+describe('Source Control view', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
+  const stubCommits = (status: number, body: unknown) =>
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => Promise.resolve(new Response(JSON.stringify(body), { status }))),
+    )
+
+  it('shows the commit graph from GitHub, newest first', async () => {
+    stubCommits(200, [
+      {
+        sha: 'b'.repeat(40),
+        html_url: 'https://github.com/Tobikun11-Arch/vscode-portfolio/commit/bbb',
+        commit: { message: 'feat: search\n\nbody', author: { name: 'Joenel', date: '2026-11-25T00:00:00Z' } },
+      },
+      {
+        sha: 'a'.repeat(40),
+        html_url: 'https://github.com/Tobikun11-Arch/vscode-portfolio/commit/aaa',
+        commit: { message: 'first', author: { name: 'Joenel', date: '2026-11-20T00:00:00Z' } },
+      },
+    ])
+    renderAt()
+    await userEvent.click(screen.getByRole('button', { name: 'Source Control' }))
+    const items = await screen.findAllByRole('listitem', { name: /commit/i })
+    expect(items).toHaveLength(2)
+    expect(items[0]).toHaveTextContent('feat: search')
+    expect(items[0]).toHaveTextContent('bbbbbbb')
+    expect(within(items[0]).getByRole('link')).toHaveAttribute(
+      'href',
+      'https://github.com/Tobikun11-Arch/vscode-portfolio/commit/bbb',
+    )
+  })
+
+  it('shows an error with a retry button when GitHub fails', async () => {
+    stubCommits(403, {})
+    renderAt()
+    await userEvent.click(screen.getByRole('button', { name: 'Source Control' }))
+    expect(await screen.findByText(/couldn't load/i)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Retry' })).toBeInTheDocument()
   })
 })

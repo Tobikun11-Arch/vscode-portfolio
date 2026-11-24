@@ -1,28 +1,30 @@
-import { Blocks, Bug, Files, GitBranch, Search, Settings, UserRound } from 'lucide-react'
+import { Blocks, Bug, Settings, UserRound } from 'lucide-react'
+import { VIEWS, type SidebarView } from './views'
 
 interface ActivityBarProps {
-  explorerOpen: boolean
-  onToggleExplorer(): void
+  view: SidebarView
+  sidebarOpen: boolean
+  onSelectView(view: SidebarView): void
 }
 
-export function ActivityBar({ explorerOpen, onToggleExplorer }: ActivityBarProps) {
+export function ActivityBar({ view, sidebarOpen, onSelectView }: ActivityBarProps) {
   return (
     <nav className="activity-bar" aria-label="Activity bar">
-      <button
-        type="button"
-        aria-label="Explorer"
-        aria-pressed={explorerOpen}
-        className={`activity-bar__item${explorerOpen ? ' is-active' : ''}`}
-        onClick={onToggleExplorer}
-      >
-        <Files size={22} strokeWidth={1.5} aria-hidden="true" />
-      </button>
-      <span className="activity-bar__item" aria-hidden="true">
-        <Search size={22} strokeWidth={1.5} />
-      </span>
-      <span className="activity-bar__item" aria-hidden="true">
-        <GitBranch size={22} strokeWidth={1.5} />
-      </span>
+      {VIEWS.map(({ id, label, Icon }) => {
+        const active = sidebarOpen && view === id
+        return (
+          <button
+            key={id}
+            type="button"
+            aria-label={label}
+            aria-pressed={active}
+            className={`activity-bar__item${active ? ' is-active' : ''}`}
+            onClick={() => onSelectView(id)}
+          >
+            <Icon size={22} strokeWidth={1.5} aria-hidden="true" />
+          </button>
+        )
+      })}
       <span className="activity-bar__item" aria-hidden="true">
         <Bug size={22} strokeWidth={1.5} />
       </span>
