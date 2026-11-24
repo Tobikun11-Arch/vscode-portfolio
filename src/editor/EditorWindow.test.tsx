@@ -84,6 +84,45 @@ describe('EditorWindow (desktop)', () => {
     expect(tabs[0]).toHaveAttribute('aria-selected', 'false')
   })
 
+  it('maximize toggles to restore', async () => {
+    renderAt()
+    await userEvent.click(screen.getByRole('button', { name: 'Maximize' }))
+    expect(screen.getByRole('button', { name: 'Restore' })).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: 'Restore' }))
+    expect(screen.getByRole('button', { name: 'Maximize' })).toBeInTheDocument()
+  })
+
+  it('close hides window and shows shortcut', async () => {
+    renderAt()
+    await userEvent.click(screen.getByRole('button', { name: 'Close' }))
+    expect(screen.queryByRole('tree')).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Joenel-Portfolio' })).toBeInTheDocument()
+  })
+
+  it('minimize hides window too', async () => {
+    renderAt()
+    await userEvent.click(screen.getByRole('button', { name: 'Minimize' }))
+    expect(screen.queryByRole('tree')).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Joenel-Portfolio' })).toBeInTheDocument()
+  })
+
+  it('double-click shortcut reopens with same file', async () => {
+    renderAt('/about')
+    await userEvent.click(screen.getByRole('button', { name: 'Close' }))
+    await userEvent.dblClick(screen.getByRole('button', { name: 'Joenel-Portfolio' }))
+    expect(screen.getByRole('heading', { level: 1, name: /about/i })).toBeInTheDocument()
+    expect(screen.getByRole('tab', { name: 'about.md' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Joenel-Portfolio' })).not.toBeInTheDocument()
+  })
+
+  it('Enter on the focused shortcut reopens', async () => {
+    renderAt()
+    await userEvent.click(screen.getByRole('button', { name: 'Close' }))
+    screen.getByRole('button', { name: 'Joenel-Portfolio' }).focus()
+    await userEvent.keyboard('{Enter}')
+    expect(tree()).toBeInTheDocument()
+  })
+
   it('title bar shows the project name and never the VS Code name', () => {
     const { container } = renderAt()
     expect(screen.getByText('Joenel-Portfolio')).toBeInTheDocument()

@@ -24,6 +24,55 @@
     0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
+.window.is-maximized {
+  width: 100vw;
+  height: 100dvh;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* ---------- Desktop shortcut (window closed) ---------- */
+.desktop-shortcut {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  width: 92px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 4px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  background: none;
+  color: #ffffff;
+  font: 12px var(--ui);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.85);
+  cursor: default;
+}
+
+.desktop-shortcut__icon {
+  color: #ffd866;
+  fill: #f5c542;
+  filter: drop-shadow(1px 2px 2px rgba(0, 0, 0, 0.45));
+}
+
+.desktop-shortcut__label {
+  padding: 0 3px;
+  word-break: break-word;
+}
+
+.desktop-shortcut.is-selected .desktop-shortcut__label,
+.desktop-shortcut:focus-visible .desktop-shortcut__label {
+  background: #316ac5;
+  text-shadow: none;
+}
+
+.desktop-shortcut:focus-visible {
+  outline: 1px dotted #ffffff;
+}
+
 .window button {
   font: inherit;
   color: inherit;
