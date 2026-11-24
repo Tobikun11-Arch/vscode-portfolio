@@ -41,9 +41,28 @@ describe('resume content', () => {
 
   it('contact email is a mailto link that does not open a blank tab', () => {
     renderPage(Contact)
-    const email = screen.getByRole('link', { name: 'joenelsevellejo831@gmail.com' })
+    const email = screen.getByRole('link', { name: /joenelsevellejo831@gmail\.com/ })
     expect(email).toHaveAttribute('href', 'mailto:joenelsevellejo831@gmail.com')
     expect(email).not.toHaveAttribute('target')
+  })
+
+  it('contact lists every channel with the right links', () => {
+    renderPage(Contact)
+    const expectLink = (name: string, href: string) =>
+      expect(screen.getByRole('link', { name: new RegExp(name, 'i') })).toHaveAttribute('href', href)
+    expectLink('github', 'https://github.com/Tobikun11-Arch')
+    expectLink('linkedin', 'https://www.linkedin.com/in/joenel-sevellejo-2919a7259')
+    expectLink('instagram', 'https://www.instagram.com/joenelsevellejo11')
+    expectLink('website', 'https://joenelseve.vercel.app/')
+    expect(screen.getByText('Dynamic VARS')).toBeInTheDocument()
+    expect(screen.getByText('Cavite, Philippines')).toBeInTheDocument()
+  })
+
+  it('external contact links open in a new tab safely', () => {
+    renderPage(Contact)
+    const github = screen.getByRole('link', { name: /github/i })
+    expect(github).toHaveAttribute('target', '_blank')
+    expect(github).toHaveAttribute('rel', 'noreferrer')
   })
 
   it('filled pages no longer show the placeholder badge', () => {

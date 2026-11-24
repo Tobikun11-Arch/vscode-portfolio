@@ -1,24 +1,83 @@
+import { Building, Globe, Mail, MapPin } from 'lucide-react'
+import type { ReactNode } from 'react'
+import { GithubIcon, InstagramIcon, LinkedinIcon } from './BrandIcons'
+
+interface Channel {
+  label: string
+  value: string
+  href?: string
+  icon: ReactNode
+}
+
 const EMAIL = 'joenelsevellejo831@gmail.com'
+
+const CHANNELS: Channel[] = [
+  { label: 'Email', value: EMAIL, href: `mailto:${EMAIL}`, icon: <Mail size={18} /> },
+  {
+    label: 'GitHub',
+    value: 'Tobikun11-Arch',
+    href: 'https://github.com/Tobikun11-Arch',
+    icon: <GithubIcon />,
+  },
+  {
+    label: 'LinkedIn',
+    value: 'in/joenel-sevellejo-2919a7259',
+    href: 'https://www.linkedin.com/in/joenel-sevellejo-2919a7259',
+    icon: <LinkedinIcon />,
+  },
+  {
+    label: 'Instagram',
+    value: 'joenelsevellejo11',
+    href: 'https://www.instagram.com/joenelsevellejo11',
+    icon: <InstagramIcon />,
+  },
+  {
+    label: 'Website',
+    value: 'joenelseve.vercel.app',
+    href: 'https://joenelseve.vercel.app/',
+    icon: <Globe size={18} />,
+  },
+  { label: 'Work', value: 'Dynamic VARS', icon: <Building size={18} /> },
+  { label: 'Location', value: 'Cavite, Philippines', icon: <MapPin size={18} /> },
+]
 
 export function Contact() {
   return (
     <article className="page">
       <h1>Contact</h1>
       <p className="page__lead">
-        Have a project in mind or want to work together? Send me an email.
+        Have a project in mind or want to work together? Email is the fastest way to reach me, or
+        find me on any of these.
       </p>
-      <dl className="page__contacts">
-        <div>
-          <dt>Email</dt>
-          <dd>
-            <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
-          </dd>
-        </div>
-        <div>
-          <dt>Location</dt>
-          <dd>Tanza, Cavite, Philippines</dd>
-        </div>
-      </dl>
+      <ul className="contact-grid">
+        {CHANNELS.map((channel) => {
+          const body = (
+            <>
+              <span className="contact-card__icon">{channel.icon}</span>
+              <span className="contact-card__text">
+                <span className="contact-card__label">{channel.label}</span>
+                <span className="contact-card__value">{channel.value}</span>
+              </span>
+            </>
+          )
+          const external = channel.href?.startsWith('http')
+          return (
+            <li key={channel.label}>
+              {channel.href ? (
+                <a
+                  className="contact-card"
+                  href={channel.href}
+                  {...(external ? { target: '_blank', rel: 'noreferrer' } : {})}
+                >
+                  {body}
+                </a>
+              ) : (
+                <div className="contact-card">{body}</div>
+              )}
+            </li>
+          )
+        })}
+      </ul>
     </article>
   )
 }
