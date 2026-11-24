@@ -1,4 +1,5 @@
 import { X } from 'lucide-react'
+import { useEffect, useRef } from 'react'
 import { fileById, type FileId } from '../files'
 import { FileIcon } from './FileIcon'
 
@@ -10,8 +11,17 @@ interface TabBarProps {
 }
 
 export function TabBar({ tabs, activeId, onSelect, onClose }: TabBarProps) {
+  const barRef = useRef<HTMLDivElement>(null)
+
+  // Keep the active tab visible when the bar overflows (common on phones).
+  useEffect(() => {
+    barRef.current
+      ?.querySelector('.tab.is-active')
+      ?.scrollIntoView({ inline: 'nearest', block: 'nearest' })
+  }, [activeId, tabs])
+
   return (
-    <div className="tab-bar" role="tablist" aria-label="Open files">
+    <div className="tab-bar" role="tablist" aria-label="Open files" ref={barRef}>
       {tabs.map((id) => {
         const file = fileById(id)
         const selected = id === activeId

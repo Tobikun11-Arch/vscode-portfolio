@@ -168,6 +168,21 @@ describe('EditorWindow (desktop)', () => {
     expect(explorer()).not.toHaveClass('is-drawer-open')
   })
 
+  it('scrolls the newly active tab into view', async () => {
+    const scrolled: string[] = []
+    const original = Element.prototype.scrollIntoView
+    Element.prototype.scrollIntoView = function (this: Element) {
+      scrolled.push(this.textContent ?? '')
+    }
+    try {
+      renderAt()
+      await userEvent.click(item('desktop-app.tsx'))
+      expect(scrolled.at(-1)).toContain('desktop-app.tsx')
+    } finally {
+      Element.prototype.scrollIntoView = original
+    }
+  })
+
   it('title bar shows the project name and never the VS Code name', () => {
     const { container } = renderAt()
     expect(screen.getByText('Joenel-Portfolio')).toBeInTheDocument()
