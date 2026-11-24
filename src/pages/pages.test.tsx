@@ -1,0 +1,56 @@
+import { render, screen } from '@testing-library/react'
+import { MemoryRouter } from 'react-router'
+import { describe, expect, it } from 'vitest'
+import { About } from './About'
+import { Contact } from './Contact'
+import { Experience } from './Experience'
+import { Home } from './Home'
+
+const renderPage = (Page: () => React.ReactElement) =>
+  render(
+    <MemoryRouter>
+      <Page />
+    </MemoryRouter>,
+  )
+
+describe('resume content', () => {
+  it('home introduces Joenel as a fullstack developer', () => {
+    renderPage(Home)
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent("Hi, I'm Joenel")
+    expect(screen.getByText(/fullstack developer/i)).toBeInTheDocument()
+  })
+
+  it('about shows education and skills', () => {
+    renderPage(About)
+    expect(screen.getByText('Cavite State University – Tanza')).toBeInTheDocument()
+    expect(screen.getByText('Bachelor of Science in Information Technology')).toBeInTheDocument()
+    for (const skill of ['Go', 'Next.js', 'Gin (Go)', 'Prisma ORM', 'Docker']) {
+      expect(screen.getByText(skill)).toBeInTheDocument()
+    }
+  })
+
+  it('experience lists the three roles in resume order', () => {
+    renderPage(Experience)
+    const roles = screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)
+    expect(roles).toHaveLength(3)
+    expect(roles[0]).toContain('Dynamic VA Referral Services')
+    expect(roles[1]).toContain('Medianeth')
+    expect(roles[2]).toContain('Freelance')
+    expect(screen.getByText('March 2025 – September 2025')).toBeInTheDocument()
+  })
+
+  it('contact email is a mailto link that does not open a blank tab', () => {
+    renderPage(Contact)
+    const email = screen.getByRole('link', { name: 'joenelsevellejo831@gmail.com' })
+    expect(email).toHaveAttribute('href', 'mailto:joenelsevellejo831@gmail.com')
+    expect(email).not.toHaveAttribute('target')
+  })
+
+  it('filled pages no longer show the placeholder badge', () => {
+    for (const Page of [Home, Experience, Contact]) {
+      const { unmount } = renderPage(Page)
+      expect(screen.queryByText('Placeholder')).not.toBeInTheDocument()
+      unmount()
+    }
+  })
+})
