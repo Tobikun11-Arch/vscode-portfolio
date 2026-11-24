@@ -21,10 +21,10 @@ export function About() {
       <div className="page__split">
         <img
           className="page__portrait"
-          src="/placeholders/portrait.svg"
+          src="/profile.jpg"
           alt="Portrait of Joenel F. Sevellejo"
-          width={320}
-          height={320}
+          width={400}
+          height={400}
         />
         <div>
           <p className="page__lead">

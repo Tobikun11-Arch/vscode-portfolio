@@ -19,7 +19,7 @@ export const PAGES: Record<FileId, ComponentType> = {
 }
 
 export const PAGE_IMAGES: string[] = [
-  '/placeholders/portrait.svg',
+  '/profile.jpg',
   '/placeholders/web-app.svg',
   '/placeholders/mobile-app.svg',
   '/placeholders/desktop-app.svg',

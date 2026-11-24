@@ -29,6 +29,14 @@ describe('resume content', () => {
     }
   })
 
+  it('about shows my real profile photo', () => {
+    renderPage(About)
+    const photo = screen.getByRole('img', { name: /joenel/i })
+    expect(photo).toHaveAttribute('src', '/profile.jpg')
+    expect(photo).toHaveAttribute('width', '400')
+    expect(photo).toHaveAttribute('height', '400')
+  })
+
   it('experience lists the three roles in resume order', () => {
     renderPage(Experience)
     const roles = screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)
