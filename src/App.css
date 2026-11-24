@@ -1,0 +1,28 @@
+/*
+ * Full-screen wallpaper.
+ * A fixed layer (instead of background-attachment: fixed) so it also
+ * stays put on iOS Safari, which ignores fixed backgrounds.
+ */
+.wallpaper {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-color: #5a8fd6;
+  background-image: url('/bliss-910.jpg');
+  background-size: cover;
+  /* Phone (portrait): keep the hill and sky in frame */
+  background-position: 40% center;
+  background-repeat: no-repeat;
+}
+
+/* Laptop / desktop: sharper image, centered */
+@media (min-width: 768px) {
+  .wallpaper {
+    background-image: url('/bliss-1200.jpg');
+    background-position: center;
+  }
+}
+
+.page {
+  min-height: 100dvh;
+}
