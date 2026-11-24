@@ -15,14 +15,10 @@
   background-repeat: no-repeat;
 }
 
-/* Laptop / desktop: sharper image, centered */
+/* Laptop / desktop: larger image, centered */
 @media (min-width: 768px) {
   .wallpaper {
     background-image: url('/bliss-1200.jpg');
     background-position: center;
   }
-}
-
-.page {
-  min-height: 100dvh;
 }

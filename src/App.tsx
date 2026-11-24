@@ -1,10 +1,14 @@
+import { Route, Routes } from 'react-router'
 import './App.css'
+import { EditorWindow } from './editor/EditorWindow'
 
 function App() {
   return (
     <>
       <div className="wallpaper" aria-hidden="true" />
-      <main className="page">{/* Portfolio content goes here */}</main>
+      <Routes>
+        <Route path="*" element={<EditorWindow />} />
+      </Routes>
     </>
   )
 }
