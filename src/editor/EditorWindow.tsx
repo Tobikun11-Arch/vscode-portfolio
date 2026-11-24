@@ -28,9 +28,11 @@ export function EditorWindow() {
   }, [])
 
   // Any navigation (file click, Back/Forward, links in a page) closes the phone drawer.
-  useEffect(() => {
+  const [drawerPath, setDrawerPath] = useState(pathname)
+  if (pathname !== drawerPath) {
+    setDrawerPath(pathname)
     setDrawerOpen(false)
-  }, [pathname])
+  }
 
   const hide = () => setWindowState('hidden')
   const openFromExplorer = (id: FileId) => {

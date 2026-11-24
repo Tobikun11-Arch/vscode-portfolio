@@ -32,9 +32,12 @@ export function useEditorTabs(): EditorTabs {
   })
 
   // Any navigation to a file (click, Back/Forward, deep link) opens its tab.
-  useEffect(() => {
+  // Adjusted during render (not in an effect) so the tab appears in the same paint.
+  const [seenActiveId, setSeenActiveId] = useState(activeId)
+  if (activeId !== seenActiveId) {
+    setSeenActiveId(activeId)
     if (activeId) setTabs((current) => openTab(current, activeId))
-  }, [activeId])
+  }
 
   useEffect(() => {
     saveTabs(tabs)
