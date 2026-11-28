@@ -37,14 +37,14 @@ describe('resume content', () => {
     expect(photo).toHaveAttribute('height', '400')
   })
 
-  it('experience lists the three roles in resume order', () => {
+  it('experience lists roles and the capstone in resume order', () => {
     renderPage(Experience)
     const roles = screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)
     expect(roles).toHaveLength(3)
     expect(roles[0]).toContain('Dynamic VA Referral Services')
-    expect(roles[1]).toContain('Medianeth')
-    expect(roles[2]).toContain('Freelance')
-    expect(screen.getByText('March 2025 – September 2025')).toBeInTheDocument()
+    expect(roles[1]).toContain('Freelance')
+    expect(roles[2]).toContain("DonClaudio's Lechon House")
+    expect(screen.getByText('March 2026 – November 2026')).toBeInTheDocument()
   })
 
   it('contact email is a mailto link that does not open a blank tab', () => {

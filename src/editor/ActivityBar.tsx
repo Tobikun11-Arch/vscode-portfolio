@@ -1,13 +1,27 @@
-import { Blocks, Bug, Settings, UserRound } from 'lucide-react'
+import { Settings, UserRound } from 'lucide-react'
+import { useCallback, useState } from 'react'
+import { AccountMenu, ManageMenu } from './ActivityMenus'
 import { VIEWS, type SidebarView } from './views'
 
 interface ActivityBarProps {
   view: SidebarView
   sidebarOpen: boolean
   onSelectView(view: SidebarView): void
+  onCommandPalette(): void
+  onResetWindow(): void
 }
 
-export function ActivityBar({ view, sidebarOpen, onSelectView }: ActivityBarProps) {
+export function ActivityBar({
+  view,
+  sidebarOpen,
+  onSelectView,
+  onCommandPalette,
+  onResetWindow,
+}: ActivityBarProps) {
+  const [menu, setMenu] = useState<'account' | 'manage' | null>(null)
+  const closeMenu = useCallback(() => setMenu(null), [])
+  const toggle = (which: 'account' | 'manage') => setMenu((m) => (m === which ? null : which))
+
   return (
     <nav className="activity-bar" aria-label="Activity bar">
       {VIEWS.map(({ id, label, Icon }) => {
@@ -25,19 +39,31 @@ export function ActivityBar({ view, sidebarOpen, onSelectView }: ActivityBarProp
           </button>
         )
       })}
-      <span className="activity-bar__item" aria-hidden="true">
-        <Bug size={22} strokeWidth={1.5} />
-      </span>
-      <span className="activity-bar__item" aria-hidden="true">
-        <Blocks size={22} strokeWidth={1.5} />
-      </span>
       <span className="activity-bar__spacer" />
-      <span className="activity-bar__item" aria-hidden="true">
-        <UserRound size={22} strokeWidth={1.5} />
-      </span>
-      <span className="activity-bar__item" aria-hidden="true">
-        <Settings size={22} strokeWidth={1.5} />
-      </span>
+      <button
+        type="button"
+        aria-label="Accounts"
+        aria-expanded={menu === 'account'}
+        data-menu-trigger
+        className={`activity-bar__item${menu === 'account' ? ' is-open' : ''}`}
+        onClick={() => toggle('account')}
+      >
+        <UserRound size={22} strokeWidth={1.5} aria-hidden="true" />
+      </button>
+      <button
+        type="button"
+        aria-label="Manage"
+        aria-expanded={menu === 'manage'}
+        data-menu-trigger
+        className={`activity-bar__item${menu === 'manage' ? ' is-open' : ''}`}
+        onClick={() => toggle('manage')}
+      >
+        <Settings size={22} strokeWidth={1.5} aria-hidden="true" />
+      </button>
+      {menu === 'account' && <AccountMenu onClose={closeMenu} />}
+      {menu === 'manage' && (
+        <ManageMenu onClose={closeMenu} onCommandPalette={onCommandPalette} onResetWindow={onResetWindow} />
+      )}
     </nav>
   )
 }

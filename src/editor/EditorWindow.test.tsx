@@ -204,7 +204,7 @@ describe('Search view', () => {
   it('clicking a match opens that file', async () => {
     renderAt()
     await userEvent.click(screen.getByRole('button', { name: 'Search' }))
-    await userEvent.type(screen.getByRole('searchbox'), 'Medianeth')
+    await userEvent.type(screen.getByRole('searchbox'), 'Dyna-Mail')
     const group = screen.getByRole('group', { name: 'experience.md' })
     await userEvent.click(within(group).getAllByRole('button')[0])
     expect(screen.getByRole('heading', { level: 1, name: /experience/i })).toBeInTheDocument()
@@ -214,7 +214,7 @@ describe('Search view', () => {
     renderAt()
     await userEvent.click(screen.getByRole('button', { name: 'Search' }))
     await userEvent.type(screen.getByRole('searchbox'), 'kubernetes-xyz')
-    expect(screen.getByText('No results found.')).toBeInTheDocument()
+    expect(screen.getByText(/^No results for/)).toBeInTheDocument()
   })
 
   it('switching views keeps the sidebar open', async () => {

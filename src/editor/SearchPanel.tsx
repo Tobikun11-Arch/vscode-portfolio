@@ -3,6 +3,9 @@ import { fileById, type FileId } from '../files'
 import { getSearchIndex, searchFiles, type SearchMatch, type SearchResult } from '../search/search'
 import { FileIcon } from './FileIcon'
 
+/** Shown before anything is typed; each one is a word that appears in the pages. */
+const SUGGESTIONS = ['React', 'Next.js', 'Go', 'Dyna-Mail', 'Electron']
+
 interface SearchPanelProps {
   onOpen(id: FileId): void
 }
@@ -26,11 +29,11 @@ export function SearchPanel({ onOpen }: SearchPanelProps) {
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<SearchResult[]>([])
 
-  const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const next = event.target.value
+  const runSearch = (next: string) => {
     setQuery(next)
     setResults(searchFiles(getSearchIndex(), next))
   }
+  const onChange = (event: ChangeEvent<HTMLInputElement>) => runSearch(event.target.value)
 
   const needle = query.trim()
   const total = results.reduce((sum, r) => sum + r.matches.length, 0)
@@ -50,7 +53,22 @@ export function SearchPanel({ onOpen }: SearchPanelProps) {
         />
       </div>
 
-      {needle && results.length === 0 && <p className="side-panel__note">No results found.</p>}
+      {!needle && (
+        <div className="search-empty">
+          <p>Search across every file in this portfolio. Try:</p>
+          <div className="search-empty__chips">
+            {SUGGESTIONS.map((word) => (
+              <button key={word} type="button" onClick={() => runSearch(word)}>
+                {word}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {needle && results.length === 0 && (
+        <p className="side-panel__note">No results for “{needle}”. Try another word.</p>
+      )}
 
       {results.length > 0 && (
         <>

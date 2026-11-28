@@ -2,7 +2,7 @@
   max-width: 760px;
   margin: 0 auto;
   padding: 32px 40px 64px;
-  color: #cccccc;
+  color: var(--text);
   font-size: 15px;
   line-height: 1.65;
 }
@@ -11,7 +11,7 @@
   margin: 0 0 16px;
   font-size: 32px;
   line-height: 1.2;
-  color: #ffffff;
+  color: var(--text-strong);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -21,22 +21,22 @@
 .page h2 {
   margin: 28px 0 10px;
   font-size: 18px;
-  color: #ffffff;
+  color: var(--text-strong);
 }
 
 .page a {
-  color: #4daafc;
+  color: var(--link);
 }
 
 .page__eyebrow {
   margin: 0 0 6px;
   font-family: var(--mono);
-  color: #6a9955;
+  color: var(--comment);
 }
 
 .page__lead {
   font-size: 17px;
-  color: #d4d4d4;
+  color: var(--text);
 }
 
 .page .page__button {
@@ -45,7 +45,7 @@
   gap: 8px;
   padding: 8px 14px;
   border-radius: 4px;
-  background: #0e639c;
+  background: var(--accent);
   color: #ffffff;
   font-size: 13px;
   text-decoration: none;
@@ -62,7 +62,7 @@
 }
 
 .page__muted {
-  color: #8b949e;
+  color: var(--text-dim);
   font-weight: normal;
 }
 
@@ -79,9 +79,9 @@
 .page__tags li {
   display: inline-block;
   padding: 4px 10px;
-  border: 1px solid #2b2b2b;
+  border: 1px solid var(--border);
   border-radius: 4px;
-  background: #252526;
+  background: var(--card);
   font-family: var(--mono);
   font-size: 13px;
   text-decoration: none;
@@ -100,7 +100,7 @@
   width: 100%;
   height: auto;
   border-radius: 6px;
-  border: 1px solid #2b2b2b;
+  border: 1px solid var(--border);
 }
 
 .page__shot {
@@ -110,7 +110,7 @@
 .page__timeline {
   list-style: none;
   padding: 0 0 0 18px;
-  border-left: 2px solid #2b2b2b;
+  border-left: 2px solid var(--border);
 }
 
 .page__timeline li {
@@ -131,7 +131,7 @@
   gap: 4px 12px;
   margin: 2px 0 8px !important;
   font-size: 13px;
-  color: #8b949e;
+  color: var(--text-dim);
 }
 
 .page__bullets {
@@ -144,7 +144,7 @@
 }
 
 .page__bullets strong {
-  color: #e8e8e8;
+  color: var(--text-strong);
 }
 
 .page__entry-head {
@@ -152,7 +152,7 @@
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 4px 12px;
-  color: #ffffff;
+  color: var(--text-strong);
 }
 
 .page__entry p {
@@ -168,12 +168,12 @@
   grid-template-columns: 170px 1fr;
   gap: 12px;
   padding: 10px 0;
-  border-bottom: 1px solid #2b2b2b;
+  border-bottom: 1px solid var(--border);
 }
 
 .page__skills dt {
   padding-top: 4px;
-  color: #8b949e;
+  color: var(--text-dim);
 }
 
 .page__skills dd {
@@ -199,21 +199,21 @@
   gap: 14px;
   height: 100%;
   padding: 14px 16px;
-  border: 1px solid #2b2b2b;
+  border: 1px solid var(--border);
   border-radius: 6px;
-  background: #252526;
-  color: #cccccc;
+  background: var(--card);
+  color: var(--text);
   text-decoration: none;
 }
 
 .page a.contact-card {
-  color: #cccccc;
+  color: var(--text);
 }
 
 a.contact-card:hover,
 a.contact-card:focus-visible {
-  border-color: #0078d4;
-  background: #2a2d2e;
+  border-color: var(--accent);
+  background: var(--hover);
 }
 
 .contact-card__icon {
@@ -223,8 +223,8 @@ a.contact-card:focus-visible {
   width: 38px;
   height: 38px;
   border-radius: 6px;
-  background: #1f1f1f;
-  color: #4daafc;
+  background: var(--bg);
+  color: var(--link);
 }
 
 .contact-card__text {
@@ -235,7 +235,7 @@ a.contact-card:focus-visible {
 
 .contact-card__label {
   font-size: 12px;
-  color: #8b949e;
+  color: var(--text-dim);
 }
 
 .contact-card__value {
@@ -246,19 +246,19 @@ a.contact-card:focus-visible {
 }
 
 a.contact-card .contact-card__value {
-  color: #4daafc;
+  color: var(--link);
 }
 
 .page__contacts div {
   display: flex;
   gap: 16px;
   padding: 10px 0;
-  border-bottom: 1px solid #2b2b2b;
+  border-bottom: 1px solid var(--border);
 }
 
 .page__contacts dt {
   width: 90px;
-  color: #8b949e;
+  color: var(--text-dim);
 }
 
 .page__contacts dd {
@@ -342,7 +342,7 @@ a.contact-card .contact-card__value {
 }
 
 .carousel__track:focus-visible {
-  outline: 2px solid #4daafc;
+  outline: 2px solid var(--link);
   outline-offset: 3px;
 }
 
@@ -363,8 +363,8 @@ a.contact-card .contact-card__value {
   width: 100%;
   height: auto;
   border-radius: 6px;
-  border: 1px solid #2b2b2b;
-  background: #252526;
+  border: 1px solid var(--border);
+  background: var(--card);
   pointer-events: none;
 }
 
@@ -387,10 +387,10 @@ a.contact-card .contact-card__value {
   width: 36px;
   height: 36px;
   padding: 0;
-  border: 1px solid #3c3c3c;
+  border: 1px solid var(--input-border);
   border-radius: 50%;
   background: rgb(30 30 30 / 0.88);
-  color: #e6e6e6;
+  color: var(--text-strong);
   cursor: pointer;
   translate: 0 -50%;
   transition:
@@ -408,7 +408,7 @@ a.contact-card .contact-card__value {
 }
 
 .carousel__arrow:hover {
-  background: #2d2d2d;
+  background: var(--card);
 }
 
 .carousel__arrow:active {
@@ -416,7 +416,7 @@ a.contact-card .contact-card__value {
 }
 
 .carousel__arrow:focus-visible {
-  outline: 2px solid #4daafc;
+  outline: 2px solid var(--link);
   outline-offset: 2px;
 }
 
@@ -444,7 +444,7 @@ a.contact-card .contact-card__value {
 .carousel__caption {
   margin: 0;
   font-size: 13px;
-  color: #8b949e;
+  color: var(--text-dim);
 }
 
 .carousel__nav {
@@ -457,7 +457,7 @@ a.contact-card .contact-card__value {
 .carousel__count {
   font-family: var(--mono);
   font-size: 12px;
-  color: #8b949e;
+  color: var(--text-dim);
   font-variant-numeric: tabular-nums;
 }
 
@@ -482,7 +482,7 @@ a.contact-card .contact-card__value {
   width: 6px;
   height: 6px;
   border-radius: 3px;
-  background: #4a4a4a;
+  background: var(--input-border);
   translate: -50% -50%;
   transition:
     width 200ms ease,
@@ -490,16 +490,16 @@ a.contact-card .contact-card__value {
 }
 
 .carousel__dot:hover::after {
-  background: #6e6e6e;
+  background: var(--text-dim);
 }
 
 .carousel__dot.is-active::after {
   width: 16px;
-  background: #4daafc;
+  background: var(--link);
 }
 
 .carousel__dot:focus-visible {
-  outline: 2px solid #4daafc;
+  outline: 2px solid var(--link);
   outline-offset: -2px;
   border-radius: 4px;
 }

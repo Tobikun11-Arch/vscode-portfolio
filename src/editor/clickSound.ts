@@ -3,6 +3,8 @@
  * no audio file to download. Two tiny filtered noise bursts: the switch
  * snapping down, then a quieter echo from the plastic shell.
  */
+import { getSettings } from './settings'
+
 type AudioCtor = typeof AudioContext
 
 let ctx: AudioContext | null = null
@@ -41,6 +43,7 @@ function burst(ac: AudioContext, at: number, freq: number, gain: number, length:
 }
 
 export function playClick() {
+  if (!getSettings().sound) return
   const ac = getContext()
   if (!ac || !noise) return
   if (ac.state === 'suspended') void ac.resume()

@@ -29,6 +29,15 @@ function savePos(p: Pos) {
   }
 }
 
+/** Where the folder icon sits on screen: the window minimizes into it and opens out of it. */
+export function shortcutCenter(): Pos {
+  const p = loadPos()
+  return {
+    x: Math.min(p.x, window.innerWidth - 92) + 46,
+    y: Math.min(p.y, window.innerHeight - 80) + 30,
+  }
+}
+
 /** Keep the icon fully on screen. */
 function clamp(p: Pos, el: HTMLElement | null): Pos {
   const w = el?.offsetWidth ?? 92

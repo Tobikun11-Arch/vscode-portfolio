@@ -27,7 +27,7 @@ export const PAGE_SEO: Record<FileId, PageSeo> = {
   experience: {
     title: `Experience — ${NAME}`,
     description:
-      'Work experience of Joenel F. Sevellejo: fullstack developer at Dynamic VA Referral Services, Medianeth and freelance clients since 2024.',
+      'Work experience of Joenel F. Sevellejo: fullstack developer at Dynamic VA Referral Services, freelance clients since 2024, and lead developer of the DonClaudio’s capstone.',
   },
   'web-app': {
     title: `Web App Projects — ${NAME}`,

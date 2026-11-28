@@ -37,7 +37,7 @@ describe('buildSearchIndex', () => {
     const about = index.find((d) => d.id === 'about')
     expect(about?.lines.some((l) => l.includes('Joenel F. Sevellejo'))).toBe(true)
     const experience = index.find((d) => d.id === 'experience')
-    expect(experience?.lines.some((l) => l.includes('Medianeth'))).toBe(true)
+    expect(experience?.lines.some((l) => l.includes('Dyna-Mail'))).toBe(true)
   })
 
   it('finds my name in home, about and contact', () => {
