@@ -6,7 +6,7 @@ import { Experience } from './Experience'
 import { Home } from './Home'
 import { DesktopApp } from './projects/DesktopApp'
 import { MobileApp } from './projects/MobileApp'
-import { PROJECTS } from './projects/data'
+import { PROJECTS, screensOf } from './projects/data'
 import { WebApp } from './projects/WebApp'
 
 export const PAGES: Record<FileId, ComponentType> = {
@@ -21,6 +21,8 @@ export const PAGES: Record<FileId, ComponentType> = {
 
 export const PAGE_IMAGES: string[] = [
   '/profile.png',
-  // First banner screenshot of each project; the rest lazy-load as you swipe.
+  // First banner screenshot of every project first, so the top of each page is ready soonest…
   ...PROJECTS.flatMap((p) => p.banners[0]?.screens[0]?.src ?? []),
+  // …then every other screenshot, so opening any project shows its images instantly.
+  ...PROJECTS.flatMap((p) => screensOf(p).flatMap((s) => s.src ?? [])),
 ]

@@ -365,3 +365,116 @@
     transition: none;
   }
 }
+
+/* ---------- "hello" intro ---------- */
+.hello {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(120% 90% at 50% 40%, rgba(44, 122, 123, 0.55), transparent 70%),
+    linear-gradient(180deg, #0b161b 0%, #132a31 50%, #1d5557 100%);
+  cursor: pointer;
+  animation: hello-in 0.5s ease-out;
+}
+
+.hello.is-leaving {
+  opacity: 0;
+  transform: scale(1.04);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
+  pointer-events: none;
+}
+
+@keyframes hello-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.hello__word {
+  width: min(900px, 92vw);
+  height: auto;
+  overflow: visible;
+}
+
+.hello__word text {
+  font-family: 'Dancing Script', 'Brush Script MT', cursive;
+  font-weight: 600;
+  font-size: 190px;
+  fill: transparent;
+  stroke: #ffffff;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1600;
+  stroke-dashoffset: 1600;
+  filter: drop-shadow(0 6px 24px rgba(0, 0, 0, 0.25));
+  /* Pen traces the letters, then the ink fills in */
+  animation:
+    hello-write 1.5s cubic-bezier(0.55, 0.1, 0.35, 1) forwards,
+    hello-ink 0.6s 1.15s ease forwards;
+}
+
+@keyframes hello-write {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes hello-ink {
+  to {
+    fill: #ffffff;
+    stroke-width: 0.6;
+  }
+}
+
+.hello__hint {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  translate: -50% 0;
+  font: 12px var(--ui);
+  color: rgba(255, 255, 255, 0.45);
+  opacity: 0;
+  animation: hello-hint 0.6s 1.6s ease forwards;
+}
+
+@keyframes hello-hint {
+  to {
+    opacity: 1;
+  }
+}
+
+/* After the intro, the dock rises into place */
+.desktop.is-arriving .dock {
+  animation: dock-arrive 0.6s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@keyframes dock-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hello,
+  .hello__word text,
+  .hello__hint,
+  .desktop.is-arriving .dock {
+    animation: none;
+  }
+
+  .hello__word text {
+    fill: #ffffff;
+    stroke: none;
+  }
+
+  .hello__hint {
+    opacity: 1;
+  }
+}
