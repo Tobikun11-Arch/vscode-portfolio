@@ -1524,3 +1524,10 @@
   background: #3fb950;
   box-shadow: 0 0 0 3px rgba(63, 185, 80, 0.2);
 }
+
+/* Real logos sit on a neutral tile, like Marketplace icons */
+.ext__icon.is-logo {
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text-strong);
+}
