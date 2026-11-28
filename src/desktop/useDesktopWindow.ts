@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from 'react'
 import { closeOut, genie, zoomFrom } from '../editor/windowMotion'
 import { dockPoint, focusApp, hideApp, useDesktop, type AppId } from './desktopStore'
 
@@ -96,6 +96,16 @@ export function useDesktopWindow(app: AppId) {
     window.addEventListener('pointerup', onUp)
     window.addEventListener('pointercancel', onUp)
   }
+
+  // The dock asked this window to minimize (its icon was clicked while it was in front).
+  const minimizeReq = useDesktop().minimizeReq[app]
+  const seenReq = useRef(minimizeReq)
+  useEffect(() => {
+    if (minimizeReq === seenReq.current) return
+    seenReq.current = minimizeReq
+    if (visible) minimize()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [minimizeReq])
 
   const moved = !maximized && (offset.x !== 0 || offset.y !== 0)
   const style: CSSProperties = {

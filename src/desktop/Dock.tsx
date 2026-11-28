@@ -5,7 +5,7 @@ import { Logo } from '../editor/Logo'
 import { GithubIcon } from '../pages/BrandIcons'
 import { RESUME_FILENAME, RESUME_URL } from '../pages/resume'
 import { usePlayer } from '../music/player'
-import { focusApp, openApp, useDesktop, type AppId } from './desktopStore'
+import { focusApp, openApp, requestMinimize, useDesktop, type AppId } from './desktopStore'
 
 interface DockItem {
   key: string
@@ -95,6 +95,9 @@ export function Dock() {
       openApp(item.app)
     } else if (front !== item.app) {
       focusApp(item.app)
+    } else {
+      // Already open and in front: clicking its icon again tucks it back into the dock.
+      requestMinimize(item.app)
     }
   }
 

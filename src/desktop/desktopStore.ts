@@ -7,6 +7,8 @@ interface DesktopState {
   open: Record<AppId, boolean>
   /** The window on top. */
   front: AppId
+  /** Bumped to ask a window to minimize itself (it owns the genie animation). */
+  minimizeReq: Record<AppId, number>
 }
 
 /**
@@ -23,18 +25,29 @@ function initialEditorOpen() {
 let state: DesktopState = {
   open: { editor: initialEditorOpen(), music: false },
   front: 'editor',
+  minimizeReq: { editor: 0, music: 0 },
 }
 const listeners = new Set<() => void>()
 const emit = () => listeners.forEach((fn) => fn())
 
 export function openApp(app: AppId) {
-  state = { open: { ...state.open, [app]: true }, front: app }
+  state = { ...state, open: { ...state.open, [app]: true }, front: app }
   emit()
 }
 
 export function hideApp(app: AppId) {
   const other: AppId = app === 'editor' ? 'music' : 'editor'
-  state = { open: { ...state.open, [app]: false }, front: state.open[other] ? other : state.front }
+  state = {
+    ...state,
+    open: { ...state.open, [app]: false },
+    front: state.open[other] ? other : state.front,
+  }
+  emit()
+}
+
+/** Ask an open window to minimize into the dock (with its animation). */
+export function requestMinimize(app: AppId) {
+  state = { ...state, minimizeReq: { ...state.minimizeReq, [app]: state.minimizeReq[app] + 1 } }
   emit()
 }
 
