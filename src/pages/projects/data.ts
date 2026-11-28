@@ -49,6 +49,7 @@ const READY = new Set([
   'titlefusion-1', 'titlefusion-1-phone', 'titlefusion-2', 'titlefusion-4',
   'dvars-1', 'dvars-1-phone',
   'customerapp-1', 'customerapp-2', 'customerapp-3', 'customerapp-4', 'customerapp-5', 'customerapp-6', 'customerapp-7', 'customerapp-8', 'customerapp-9',
+  'fluely-1', 'fluely-2', 'fluely-4',
   'clovars-1', 'clovars-2', 'clovars-3', 'clovars-6',
   'vanora-1', 'vanora-2', 'vanora-3', 'vanora-4', 'vanora-5', 'vanora-6', 'vanora-7', 'vanora-8',
 ])
@@ -277,9 +278,9 @@ export const PROJECTS: Project[] = [
         screens: [s('fluely-1', 'Dashboard')],
       },
       {
-        headline: 'One board, five views.',
-        caption: 'Switch a board between Kanban, Calendar, Table, Timeline and Map.',
-        screens: [s('fluely-2', 'Kanban board')],
+        headline: 'Every channel on one calendar.',
+        caption: 'Plan Facebook, LinkedIn, YouTube and TikTok posts by month, on a board or in a table.',
+        screens: [s('fluely-2', 'Social posting calendar')],
       },
       {
         headline: 'Drag work onto the right day.',

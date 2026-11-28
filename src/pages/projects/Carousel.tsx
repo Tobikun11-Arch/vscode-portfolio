@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Maximize2, Pause, Play, X } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { CSSProperties, KeyboardEvent, PointerEvent, ReactNode } from 'react'
 
@@ -25,15 +25,20 @@ const prefersReducedMotion = () =>
  * Horizontal slider that also plays on its own. Native scroll-snap does the
  * swiping on touch and trackpads; arrows, dots, keyboard and mouse drag cover
  * everything else. Auto-play pauses on hover, focus, drag and when hidden, and
- * the pause button stops it for good.
+ * the pause button stops it for good. Clicking a slide opens it large in a
+ * viewer that covers most of the screen.
  */
 export function Carousel({ label, slides, active = true, interval = 5000 }: Props) {
   const track = useRef<HTMLUListElement>(null)
   const root = useRef<HTMLElement>(null)
   const [index, setIndex] = useState(0)
   const [stopped, setStopped] = useState(prefersReducedMotion)
-  const [held, setHeld] = useState({ hover: false, focus: false, drag: false, hidden: false })
+  const [held, setHeld] = useState({ hover: false, focus: false, drag: false, hidden: false, viewer: false })
   const drag = useRef<{ x: number; left: number; moved: boolean } | null>(null)
+  /** Set for one tick after a mouse drag so the click that ends it does not open the viewer. */
+  const dragged = useRef(false)
+  const dialog = useRef<HTMLDialogElement>(null)
+  const [viewer, setViewer] = useState<number | null>(null)
 
   const count = slides.length
   const items = () => Array.from(track.current?.children ?? []) as HTMLElement[]
@@ -117,6 +122,7 @@ export function Carousel({ label, slides, active = true, interval = 5000 }: Prop
     else if (e.key === 'ArrowLeft') goTo(Math.max(index - 1, 0))
     else if (e.key === 'Home') goTo(0)
     else if (e.key === 'End') goTo(count - 1)
+    else if (e.key === 'Enter') openViewer(index)
     else return
     e.preventDefault()
   }
@@ -145,6 +151,8 @@ export function Carousel({ label, slides, active = true, interval = 5000 }: Prop
     const el = track.current
     drag.current = null
     if (!d?.moved || !el) return
+    dragged.current = true
+    window.setTimeout(() => (dragged.current = false), 0)
     el.classList.remove('is-dragging')
     hold('drag', false)
     const from = Math.max(
@@ -153,6 +161,31 @@ export function Carousel({ label, slides, active = true, interval = 5000 }: Prop
     )
     const moved = el.scrollLeft - d.left
     goTo(Math.min(count - 1, Math.max(0, from + (Math.abs(moved) > 40 ? Math.sign(moved) : 0))))
+  }
+
+  // The viewer is a native modal <dialog>: it sits above everything, traps focus,
+  // closes on Escape and hands focus back to the carousel when it closes.
+  const openViewer = (i: number) => {
+    if (dragged.current) return
+    setViewer(i)
+  }
+  const closeViewer = () => dialog.current?.close()
+  const step = (dir: 1 | -1) => setViewer((v) => (v === null ? v : (v + dir + count) % count))
+
+  useEffect(() => {
+    const d = dialog.current
+    if (!d) return
+    if (viewer !== null && !d.open) {
+      hold('viewer', true)
+      d.showModal?.()
+    }
+  }, [viewer, hold])
+
+  const onViewerKey = (e: KeyboardEvent) => {
+    if (e.key === 'ArrowRight') step(1)
+    else if (e.key === 'ArrowLeft') step(-1)
+    else return
+    e.preventDefault()
   }
 
   const single = count <= 1
@@ -200,6 +233,7 @@ export function Carousel({ label, slides, active = true, interval = 5000 }: Prop
               className="carousel__slide"
               aria-roledescription="slide"
               aria-label={`${i + 1} of ${count}: ${s.label}`}
+              onClick={() => openViewer(i)}
             >
               {s.content}
             </li>
@@ -241,6 +275,9 @@ export function Carousel({ label, slides, active = true, interval = 5000 }: Prop
           >
             {stopped ? <Play size={14} /> : <Pause size={14} />}
           </button>
+          <button type="button" className="carousel__play" aria-label="View larger" onClick={() => openViewer(index)}>
+            <Maximize2 size={14} />
+          </button>
           <span className="carousel__count">
             {index + 1} / {count}
           </span>
@@ -261,6 +298,67 @@ export function Carousel({ label, slides, active = true, interval = 5000 }: Prop
           </div>
         </div>
       )}
+
+      {single && (
+        <div className="carousel__footer">
+          <button type="button" className="carousel__play" aria-label="View larger" onClick={() => openViewer(0)}>
+            <Maximize2 size={14} />
+          </button>
+        </div>
+      )}
+
+      <dialog
+        ref={dialog}
+        className="viewer"
+        aria-label={`${label}, enlarged`}
+        onClose={() => {
+          setViewer(null)
+          hold('viewer', false)
+          if (viewer !== null) goTo(viewer)
+        }}
+        onClick={(e) => {
+          // A click on the dimmed area around the frame closes it.
+          if (e.target === e.currentTarget) closeViewer()
+        }}
+        onKeyDown={onViewerKey}
+      >
+        {viewer !== null && (
+          <div className="viewer__frame">
+            <div className="viewer__bar">
+              <span className="viewer__title">{slides[viewer]?.label}</span>
+              {!single && (
+                <span className="viewer__count">
+                  {viewer + 1} / {count}
+                </span>
+              )}
+              <button type="button" className="viewer__close" aria-label="Close" onClick={closeViewer} autoFocus>
+                <X size={18} />
+              </button>
+            </div>
+            <div className="viewer__stage">{slides[viewer]?.content}</div>
+            {!single && (
+              <>
+                <button
+                  type="button"
+                  className="viewer__nav viewer__nav--prev"
+                  aria-label="Previous slide"
+                  onClick={() => step(-1)}
+                >
+                  <ChevronLeft size={22} />
+                </button>
+                <button
+                  type="button"
+                  className="viewer__nav viewer__nav--next"
+                  aria-label="Next slide"
+                  onClick={() => step(1)}
+                >
+                  <ChevronRight size={22} />
+                </button>
+              </>
+            )}
+          </div>
+        )}
+      </dialog>
     </section>
   )
 }

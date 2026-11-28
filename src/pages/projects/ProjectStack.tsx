@@ -14,6 +14,9 @@ const MAX_LOCK_MS = 1600
 
 type Landing = 'top' | 'bottom'
 
+/** Input inside an open image viewer belongs to the viewer, not the page turner. */
+const inViewer = (target: EventTarget | null) => target instanceof Element && !!target.closest('dialog')
+
 const atTop = (el: HTMLElement) => el.scrollTop <= 1
 const atBottom = (el: HTMLElement) => el.scrollTop + el.clientHeight >= el.scrollHeight - 2
 
@@ -53,7 +56,7 @@ export function ProjectStack({ kind }: { kind: ProjectKind }) {
     const el = stack.current
     if (!el) return
     const onWheel = (e: WheelEvent) => {
-      if (e.ctrlKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return
+      if (e.ctrlKey || Math.abs(e.deltaX) > Math.abs(e.deltaY) || inViewer(e.target)) return
       const w = wheel.current
       const now = performance.now()
       if (now < w.lockUntil) {
@@ -88,7 +91,7 @@ export function ProjectStack({ kind }: { kind: ProjectKind }) {
   const onTouchStart = (e: TouchEvent) => {
     const panel = panels.current[activeRef.current]
     const t = e.touches[0]
-    if (!panel || !t || e.touches.length > 1) return
+    if (!panel || !t || e.touches.length > 1 || inViewer(e.target)) return
     touch.current = { x: t.clientX, y: t.clientY, top: atTop(panel), bottom: atBottom(panel) }
   }
   const onTouchEnd = (e: TouchEvent) => {
@@ -108,7 +111,7 @@ export function ProjectStack({ kind }: { kind: ProjectKind }) {
   // Keyboard: Page Down / Space / Down at the bottom, Page Up / Up at the top.
   const onKeyDown = (e: KeyboardEvent) => {
     const target = e.target as HTMLElement
-    if (target.closest('input, textarea, select, button, a, [contenteditable="true"]')) return
+    if (inViewer(target) || target.closest('input, textarea, select, button, a, [contenteditable="true"]')) return
     const panel = panels.current[activeRef.current]
     if (!panel) return
     const i = activeRef.current
