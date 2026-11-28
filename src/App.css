@@ -2,22 +2,20 @@
  * Full-screen wallpaper.
  * A fixed layer (instead of background-attachment: fixed) so it also
  * stays put on iOS Safari, which ignores fixed backgrounds.
+ * Dusk is the default; Settings → Wallpaper sets html[data-wallpaper].
  */
 .wallpaper {
   position: fixed;
   inset: 0;
   z-index: -1;
-  background-color: #5a8fd6;
-  background-image: url('/bliss-910.jpg');
+  background: linear-gradient(160deg, #2b1055 0%, #7597de 55%, #f6a679 100%);
+}
+
+html[data-wallpaper='bliss'] .wallpaper {
+  background: #5a8fd6 url('/bliss-910.jpg') no-repeat;
   background-size: cover;
   /* Phone (portrait): keep the hill and sky in frame */
   background-position: 40% center;
-  background-repeat: no-repeat;
-}
-
-/* Other wallpapers (Settings → Wallpaper). html[...] beats the media query below. */
-html[data-wallpaper='dusk'] .wallpaper {
-  background: linear-gradient(160deg, #2b1055 0%, #7597de 55%, #f6a679 100%);
 }
 
 html[data-wallpaper='ocean'] .wallpaper {
@@ -28,9 +26,8 @@ html[data-wallpaper='graphite'] .wallpaper {
   background: radial-gradient(circle at 30% 20%, #3a3f47 0%, #1b1d21 70%);
 }
 
-/* Laptop / desktop: larger image, centered */
+/* Laptop / desktop: larger hills image, centered */
 @media (min-width: 768px) {
-  html:not([data-wallpaper]) .wallpaper,
   html[data-wallpaper='bliss'] .wallpaper {
     background-image: url('/bliss-1200.jpg');
     background-position: center;

@@ -1,0 +1,344 @@
+/* ---------- Desktop layout: windows share one centered cell above the dock ---------- */
+.desktop {
+  --dock-space: 84px;
+  padding-bottom: var(--dock-space);
+}
+
+.desktop > .window {
+  grid-area: 1 / 1;
+}
+
+.desktop > .window.is-maximized {
+  width: 100vw;
+  height: calc(100dvh - var(--dock-space));
+  align-self: start;
+}
+
+/* ---------- Dock ---------- */
+.dock {
+  position: fixed;
+  left: 50%;
+  bottom: 8px;
+  z-index: 30;
+  translate: -50% 0;
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 64px;
+  padding: 0 8px 7px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 20px;
+  background: rgba(30, 30, 40, 0.35);
+  backdrop-filter: blur(24px) saturate(1.6);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.dock__item {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  transition:
+    width 0.12s ease-out,
+    height 0.12s ease-out;
+}
+
+.dock__tile {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  border-radius: 23%;
+  box-shadow:
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.25),
+    0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dock__tile svg {
+  width: 58%;
+  height: 58%;
+}
+
+.dock__tile.is-editor {
+  background: linear-gradient(160deg, #1e2a3a, #0d1117);
+}
+
+.dock__tile.is-editor svg {
+  width: 72%;
+  height: 72%;
+}
+
+.dock__tile.is-music {
+  background: linear-gradient(160deg, #1ed760, #128c41);
+  color: #000000;
+}
+
+.dock__tile.is-resume {
+  background: linear-gradient(160deg, #ffffff, #dfe3ea);
+  color: #d03b3b;
+}
+
+.dock__tile.is-github {
+  background: linear-gradient(160deg, #2d333b, #161b22);
+  color: #ffffff;
+}
+
+.dock__divider {
+  align-self: center;
+  width: 1px;
+  height: 40px;
+  margin: 0 4px 2px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.dock__dot {
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  translate: -50% 0;
+}
+
+.dock__label {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  translate: -50% 4px;
+  padding: 3px 10px;
+  border-radius: 6px;
+  background: rgba(30, 30, 30, 0.85);
+  color: #ffffff;
+  font: 12px var(--ui);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    opacity 0.12s,
+    translate 0.12s;
+}
+
+.dock__item:hover .dock__label,
+.dock__item:focus-visible .dock__label {
+  opacity: 1;
+  translate: -50% 0;
+}
+
+.dock__item:focus-visible {
+  outline: none;
+}
+
+.dock__item:focus-visible .dock__tile {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+.dock__item.is-bouncing .dock__tile {
+  animation: dock-bounce 0.7s cubic-bezier(0.3, 0, 0.3, 1);
+}
+
+@keyframes dock-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-22px);
+  }
+  55% {
+    transform: translateY(0);
+  }
+  75% {
+    transform: translateY(-8px);
+  }
+}
+
+/* ---------- Dynamic Island ---------- */
+.island {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  z-index: 40;
+  translate: -50% 0;
+  width: 236px;
+  height: 38px;
+  overflow: hidden;
+  border-radius: 22px;
+  background: #000000;
+  color: #ffffff;
+  font-family: var(--ui);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  animation: island-in 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+  transition:
+    width 0.45s cubic-bezier(0.32, 0.72, 0, 1),
+    height 0.45s cubic-bezier(0.32, 0.72, 0, 1),
+    border-radius 0.45s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.island.is-expanded {
+  width: 360px;
+  height: 168px;
+  border-radius: 34px;
+  cursor: default;
+}
+
+@keyframes island-in {
+  from {
+    width: 120px;
+    opacity: 0;
+    transform: scale(0.85);
+  }
+}
+
+.island__compact,
+.island__full {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0.25s ease;
+}
+
+.island__compact {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px 0 6px;
+}
+
+.island__compact img {
+  flex: none;
+  border-radius: 50%;
+}
+
+.island__ticker {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.island__full {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px 20px 14px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.island.is-expanded .island__compact {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.island.is-expanded .island__full {
+  opacity: 1;
+  pointer-events: auto;
+  transition-delay: 0.1s;
+}
+
+.island__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.island__row img {
+  flex: none;
+  border-radius: 10px;
+}
+
+.island__row.is-controls {
+  justify-content: center;
+  position: relative;
+}
+
+.island__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.island__kicker,
+.island__title,
+.island__artist {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.island__kicker {
+  font-size: 11px;
+  color: #8e8e93;
+}
+
+.island__title {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.island__artist {
+  font-size: 13px;
+  color: #b3b3b3;
+}
+
+.island .progress {
+  color: #8e8e93;
+}
+
+.island__open {
+  position: absolute;
+  right: 0;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #2c2c2e;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.island__open:hover {
+  background: #3a3a3c;
+}
+
+/* ---------- Phones ---------- */
+@media (max-width: 767px) {
+  /* Windows are full screen on phones, so the dock steps aside while one is open */
+  .desktop.has-open-window .dock {
+    display: none;
+  }
+
+  /* Keep the traffic lights so phone visitors can get back to the desktop */
+  .window .title-bar__controls {
+    display: flex;
+    padding: 0 6px;
+  }
+
+  .island.is-expanded {
+    width: calc(100vw - 24px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .island,
+  .dock__item,
+  .dock__item.is-bouncing .dock__tile {
+    animation: none;
+    transition: none;
+  }
+}

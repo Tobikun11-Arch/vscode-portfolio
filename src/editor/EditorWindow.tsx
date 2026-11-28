@@ -1,5 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import type { PointerEvent as ReactPointerEvent } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useNavigationType } from 'react-router'
 import type { FileId } from '../files'
 import { PAGE_IMAGES } from '../pages/registry'
@@ -9,8 +8,7 @@ import { useEditorTabs } from '../tabs/useEditorTabs'
 import { ActivityBar } from './ActivityBar'
 import { GitGraphPanel } from './GitGraphPanel'
 import { SearchPanel } from './SearchPanel'
-import { DesktopShortcut, shortcutCenter } from './DesktopShortcut'
-import { closeOut, genie, zoomFrom } from './windowMotion'
+import { useDesktopWindow } from '../desktop/useDesktopWindow'
 import { EditorArea } from './EditorArea'
 import './editor.css'
 import { Explorer } from './Explorer'
@@ -27,13 +25,10 @@ import { THEMES, WALLPAPERS, updateSettings, useSettings } from './settings'
 import { RESUME_FILENAME, RESUME_URL } from '../pages/resume'
 import { fileById } from '../files'
 
-type WindowState = 'normal' | 'maximized' | 'hidden'
-
 export function EditorWindow() {
   const { tabs, activeId, status, open, close } = useEditorTabs()
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [view, setView] = useState<SidebarView>('explorer')
-  const [windowState, setWindowState] = useState<WindowState>('normal')
 
   const [drawerOpen, setDrawerOpen] = useState(false)
   const { pathname } = useLocation()
@@ -96,98 +91,8 @@ export function EditorWindow() {
     setDrawerOpen(false)
   }
 
-  const winRef = useRef<HTMLDivElement>(null)
-  const animating = useRef(false)
-  const restoreTo = useRef<'normal' | 'maximized'>('normal')
-  const openFromFolder = useRef(false)
-  const zoomFirst = useRef<DOMRect | null>(null)
-  const [offset, setOffset] = useState({ x: 0, y: 0 })
-  const [dragging, setDragging] = useState(false)
-
-  // Play the open / zoom animation right after React swaps the layout in.
-  useLayoutEffect(() => {
-    const el = winRef.current
-    if (!el) return
-    if (openFromFolder.current) {
-      openFromFolder.current = false
-      genie(el, shortcutCenter(), true)
-    } else if (zoomFirst.current) {
-      zoomFrom(el, zoomFirst.current)
-    }
-    zoomFirst.current = null
-  }, [windowState])
-
-  const runThen = async (anim: Animation | null, then: () => void) => {
-    if (animating.current) return
-    if (anim) {
-      animating.current = true
-      await anim.finished.catch(() => {})
-      animating.current = false
-    }
-    then()
-  }
-
-  const minimize = () => {
-    restoreTo.current = windowState === 'maximized' ? 'maximized' : 'normal'
-    const el = winRef.current
-    void runThen(el && genie(el, shortcutCenter()), () => setWindowState('hidden'))
-  }
-
-  const closeWindow = () => {
-    restoreTo.current = 'normal'
-    const el = winRef.current
-    void runThen(el && closeOut(el), () => {
-      setOffset({ x: 0, y: 0 })
-      setWindowState('hidden')
-    })
-  }
-
-  const reopen = () => {
-    openFromFolder.current = true
-    setWindowState(restoreTo.current)
-  }
-
-  const toggleMaximize = () => {
-    if (animating.current) return
-    zoomFirst.current = winRef.current?.getBoundingClientRect() ?? null
-    setWindowState(windowState === 'maximized' ? 'normal' : 'maximized')
-  }
-
-  /** Drag the window by its title bar, keeping the title bar reachable on screen. */
-  const startDrag = (e: ReactPointerEvent<HTMLElement>) => {
-    const el = winRef.current
-    if (!el || windowState !== 'normal' || window.matchMedia?.('(max-width: 767px)').matches) return
-    const rect = el.getBoundingClientRect()
-    const start = { x: e.clientX, y: e.clientY, ox: offset.x, oy: offset.y }
-    const base = { left: rect.left - offset.x, top: rect.top - offset.y }
-    const KEEP = 120
-    let moved = false
-
-    const onMove = (ev: PointerEvent) => {
-      const dx = ev.clientX - start.x
-      const dy = ev.clientY - start.y
-      if (!moved && Math.hypot(dx, dy) < 3) return
-      if (!moved) {
-        moved = true
-        setDragging(true)
-      }
-      const left = Math.min(
-        Math.max(base.left + start.ox + dx, KEEP - rect.width),
-        window.innerWidth - KEEP,
-      )
-      const top = Math.min(Math.max(base.top + start.oy + dy, 0), window.innerHeight - 40)
-      setOffset({ x: left - base.left, y: top - base.top })
-    }
-    const onUp = () => {
-      window.removeEventListener('pointermove', onMove)
-      window.removeEventListener('pointerup', onUp)
-      window.removeEventListener('pointercancel', onUp)
-      setDragging(false)
-    }
-    window.addEventListener('pointermove', onMove)
-    window.addEventListener('pointerup', onUp)
-    window.addEventListener('pointercancel', onUp)
-  }
+  const win = useDesktopWindow('editor')
+  const maximized = win.maximized
 
   const openFromSidebar = (id: FileId) => {
     setDrawerOpen(false)
@@ -205,8 +110,7 @@ export function EditorWindow() {
   }
 
   const resetWindow = () => {
-    setOffset({ x: 0, y: 0 })
-    setWindowState('normal')
+    win.reset()
     setSidebarOpen(true)
     setView('explorer')
     setTerminalOpen(false)
@@ -244,34 +148,26 @@ export function EditorWindow() {
     { id: 'reset', label: 'View: Reset Window', run: resetWindow },
   ]
 
-  if (windowState === 'hidden') {
-    return (
-      <div className="desktop">
-        <DesktopShortcut onOpen={reopen} />
-      </div>
-    )
-  }
-
-  const maximized = windowState === 'maximized'
-  const moved = !maximized && (offset.x !== 0 || offset.y !== 0)
+  if (!win.visible) return null
 
   return (
-    <div className="desktop">
+    <>
       <div
-        ref={winRef}
-        className={`window${maximized ? ' is-maximized' : ''}${dragging ? ' is-dragging' : ''}`}
-        style={moved ? { translate: `${offset.x}px ${offset.y}px` } : undefined}
+        ref={win.ref}
+        className={`window${maximized ? ' is-maximized' : ''}${win.dragging ? ' is-dragging' : ''}`}
+        style={win.style}
+        onPointerDownCapture={win.focus}
         data-theme={settings.theme}
         role="application"
         aria-label="Joenel-Portfolio editor"
       >
         <TitleBar
           onToggleDrawer={() => setDrawerOpen((v) => !v)}
-          onMinimize={minimize}
-          onMaximize={toggleMaximize}
-          onClose={closeWindow}
+          onMinimize={win.minimize}
+          onMaximize={win.toggleMaximize}
+          onClose={win.close}
           maximized={maximized}
-          onDragStart={startDrag}
+          onDragStart={win.startDrag}
           nav={{
             canBack: historyIdx > 0,
             canForward: historyIdx < maxIdx,
@@ -377,6 +273,6 @@ export function EditorWindow() {
           />
         )}
       </div>
-    </div>
+    </>
   )
 }

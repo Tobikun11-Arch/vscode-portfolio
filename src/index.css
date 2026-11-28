@@ -20,6 +20,6 @@ body,
 body {
   font-family: var(--ui);
   color: #cccccc;
-  /* Sky blue fallback while the wallpaper loads */
-  background: #5a8fd6;
+  /* Dusk purple fallback behind the wallpaper */
+  background: #3d2a73;
 }

@@ -1,4 +1,4 @@
-/* ---------- Desktop surface ---------- */
+﻿/* ---------- Desktop surface ---------- */
 .desktop {
   position: fixed;
   inset: 0;
@@ -6,7 +6,7 @@
   place-items: center;
 }
 
-/* ---------- Theme tokens (Settings → Color Theme) ---------- */
+/* ---------- Theme tokens (Settings â†’ Color Theme) ---------- */
 .window {
   --bg: #1f1f1f;
   --bg-side: #181818;
@@ -85,54 +85,6 @@
   border: 0;
   border-radius: 0;
   box-shadow: none;
-}
-
-/* ---------- Desktop shortcut (window closed) ---------- */
-.desktop-shortcut {
-  position: fixed;
-  top: 12px;
-  left: 12px;
-  width: 92px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 6px 4px;
-  border: 1px solid transparent;
-  border-radius: 2px;
-  background: none;
-  color: #ffffff;
-  font: 12px var(--ui);
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.85);
-  cursor: default;
-  touch-action: none;
-  user-select: none;
-  -webkit-user-select: none;
-}
-
-.desktop-shortcut.is-dragging {
-  opacity: 0.75;
-}
-
-.desktop-shortcut__icon {
-  color: #ffd866;
-  fill: #f5c542;
-  filter: drop-shadow(1px 2px 2px rgba(0, 0, 0, 0.45));
-}
-
-.desktop-shortcut__label {
-  padding: 0 3px;
-  word-break: break-word;
-}
-
-.desktop-shortcut.is-selected .desktop-shortcut__label,
-.desktop-shortcut:focus-visible .desktop-shortcut__label {
-  background: #316ac5;
-  text-shadow: none;
-}
-
-.desktop-shortcut:focus-visible {
-  outline: 1px dotted #ffffff;
 }
 
 .window button {

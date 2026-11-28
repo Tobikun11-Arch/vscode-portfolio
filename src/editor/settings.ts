@@ -22,8 +22,9 @@ export const WALLPAPERS: { id: WallpaperId; label: string }[] = [
   { id: 'graphite', label: 'Graphite' },
 ]
 
-const KEY = 'portfolio-settings'
-const DEFAULTS: Settings = { theme: 'dark', wallpaper: 'bliss', sound: true }
+// v2: Dusk became the default wallpaper, so earlier saved picks (Rolling hills) are reset once.
+const KEY = 'portfolio-settings-v2'
+const DEFAULTS: Settings = { theme: 'dark', wallpaper: 'dusk', sound: true }
 
 function load(): Settings {
   try {

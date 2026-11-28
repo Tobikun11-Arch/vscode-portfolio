@@ -62,6 +62,38 @@ const ZoomGlyph = ({ maximized }: { maximized: boolean }) => (
   </svg>
 )
 
+/** macOS close / minimize / zoom buttons, shared by every window. */
+export function TrafficLights({
+  onClose,
+  onMinimize,
+  onMaximize,
+  maximized,
+}: {
+  onClose(): void
+  onMinimize(): void
+  onMaximize(): void
+  maximized: boolean
+}) {
+  return (
+    <div className="title-bar__controls">
+      <button type="button" aria-label="Close" className="traffic-light is-close" onClick={onClose}>
+        <CloseGlyph />
+      </button>
+      <button type="button" aria-label="Minimize" className="traffic-light is-minimize" onClick={onMinimize}>
+        <MinimizeGlyph />
+      </button>
+      <button
+        type="button"
+        aria-label={maximized ? 'Restore' : 'Maximize'}
+        className="traffic-light is-zoom"
+        onClick={onMaximize}
+      >
+        <ZoomGlyph maximized={maximized} />
+      </button>
+    </div>
+  )
+}
+
 export function TitleBar({
   onToggleDrawer,
   onMinimize,
@@ -92,27 +124,12 @@ export function TitleBar({
       >
         <Menu size={18} aria-hidden="true" />
       </button>
-      <div className="title-bar__controls">
-        <button type="button" aria-label="Close" className="traffic-light is-close" onClick={onClose}>
-          <CloseGlyph />
-        </button>
-        <button
-          type="button"
-          aria-label="Minimize"
-          className="traffic-light is-minimize"
-          onClick={onMinimize}
-        >
-          <MinimizeGlyph />
-        </button>
-        <button
-          type="button"
-          aria-label={maximized ? 'Restore' : 'Maximize'}
-          className="traffic-light is-zoom"
-          onClick={onMaximize}
-        >
-          <ZoomGlyph maximized={maximized} />
-        </button>
-      </div>
+      <TrafficLights
+        onClose={onClose}
+        onMinimize={onMinimize}
+        onMaximize={onMaximize}
+        maximized={maximized}
+      />
       <div className="title-bar__center">
         <span className="title-bar__nav">
           <button type="button" aria-label="Go back" disabled={!nav.canBack} onClick={nav.onBack}>

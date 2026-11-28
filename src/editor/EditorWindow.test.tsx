@@ -118,7 +118,8 @@ describe('EditorWindow (desktop)', () => {
     await userEvent.dblClick(screen.getByRole('button', { name: 'Joenel-Portfolio' }))
     expect(screen.getByRole('heading', { level: 1, name: /about/i })).toBeInTheDocument()
     expect(screen.getByRole('tab', { name: 'about.md' })).toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: 'Joenel-Portfolio' })).not.toBeInTheDocument()
+    // The folder stays on the desktop (like a real one) while the window is open.
+    expect(screen.getByRole('button', { name: 'Joenel-Portfolio' })).toBeInTheDocument()
   })
 
   it('Enter on the focused shortcut reopens', async () => {

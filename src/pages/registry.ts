@@ -6,7 +6,7 @@ import { Experience } from './Experience'
 import { Home } from './Home'
 import { DesktopApp } from './projects/DesktopApp'
 import { MobileApp } from './projects/MobileApp'
-import { PROJECT_SHOTS } from './projects/shots'
+import { PROJECTS } from './projects/data'
 import { WebApp } from './projects/WebApp'
 
 export const PAGES: Record<FileId, ComponentType> = {
@@ -21,6 +21,6 @@ export const PAGES: Record<FileId, ComponentType> = {
 
 export const PAGE_IMAGES: string[] = [
   '/profile.png',
-  // First screenshot of each project; the rest lazy-load as you swipe.
-  ...Object.values(PROJECT_SHOTS).map((shots) => shots[0].src),
+  // First banner screenshot of each project; the rest lazy-load as you swipe.
+  ...PROJECTS.flatMap((p) => p.banners[0]?.screens[0]?.src ?? []),
 ]
