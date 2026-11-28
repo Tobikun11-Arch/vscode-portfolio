@@ -209,7 +209,7 @@ export function MusicWindow() {
               <p className="music__kicker">Playlist</p>
               <h1 className="music__title">{PLAYLIST_NAME}</h1>
               <p className="music__desc">
-                Tagalog and English songs about loving someone who doesn't love you back.
+                Enjoy my playlists!
               </p>
               <p className="music__meta">
                 <strong>Joenel</strong> · {TRACKS.length} songs · 30-sec previews

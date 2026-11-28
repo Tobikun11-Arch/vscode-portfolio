@@ -2,12 +2,16 @@
  * Full-screen wallpaper.
  * A fixed layer (instead of background-attachment: fixed) so it also
  * stays put on iOS Safari, which ignores fixed backgrounds.
- * Dusk is the default; Settings → Wallpaper sets html[data-wallpaper].
+ * Ocean is the default; Settings → Wallpaper sets html[data-wallpaper].
  */
 .wallpaper {
   position: fixed;
   inset: 0;
   z-index: -1;
+  background: linear-gradient(180deg, #0f2027 0%, #203a43 45%, #2c7a7b 100%);
+}
+
+html[data-wallpaper='dusk'] .wallpaper {
   background: linear-gradient(160deg, #2b1055 0%, #7597de 55%, #f6a679 100%);
 }
 
@@ -16,10 +20,6 @@ html[data-wallpaper='bliss'] .wallpaper {
   background-size: cover;
   /* Phone (portrait): keep the hill and sky in frame */
   background-position: 40% center;
-}
-
-html[data-wallpaper='ocean'] .wallpaper {
-  background: linear-gradient(180deg, #0f2027 0%, #203a43 45%, #2c7a7b 100%);
 }
 
 html[data-wallpaper='graphite'] .wallpaper {

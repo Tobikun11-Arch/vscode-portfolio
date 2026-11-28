@@ -15,7 +15,7 @@ export interface Track {
 
 export const PLAYLIST_NAME = "Joenel Playlist";
 
-export const TRACKS: Track[
+export const TRACKS: Track[] = [
   {
     id: 1766905828,
     title: "Multo",
