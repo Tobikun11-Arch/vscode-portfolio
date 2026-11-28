@@ -21,7 +21,7 @@ export function About() {
       <div className="page__split">
         <img
           className="page__portrait"
-          src="/profile.jpg"
+          src="/profile.png"
           alt="Portrait of Joenel F. Sevellejo"
           width={400}
           height={400}

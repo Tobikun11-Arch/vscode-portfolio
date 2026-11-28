@@ -1,5 +1,7 @@
+import { FileDown } from 'lucide-react'
 import { Link } from 'react-router'
 import { FILES } from '../files'
+import { RESUME_FILENAME, RESUME_URL } from './resume'
 
 export function Home() {
   const others = FILES.filter((f) => f.id !== 'home')
@@ -11,6 +13,12 @@ export function Home() {
         Fullstack developer from Tanza, Cavite. I build web and mobile apps with React, Next.js,
         Node.js and Go, from automated email outreach systems to production platforms used every
         day.
+      </p>
+      <p>
+        <a className="page__button" href={RESUME_URL} download={RESUME_FILENAME}>
+          <FileDown size={16} aria-hidden="true" />
+          Download resume
+        </a>
       </p>
       <p>
         I'm also taking a BS in Information Technology at Cavite State University – Tanza. Open a

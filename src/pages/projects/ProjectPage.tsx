@@ -1,25 +1,22 @@
 import { Placeholder } from '../Placeholder'
+import { ScreenshotCarousel } from './ScreenshotCarousel'
+import type { Screenshot } from './ScreenshotCarousel'
 
 export interface ProjectPageProps {
   title: string
-  image: string
+  shots: Screenshot[]
+  orientation?: 'landscape' | 'portrait'
   tech: string[]
 }
 
 /** Shared layout for the three project files. */
-export function ProjectPage({ title, image, tech }: ProjectPageProps) {
+export function ProjectPage({ title, shots, orientation, tech }: ProjectPageProps) {
   return (
     <article className="page">
       <h1>
         {title} <Placeholder />
       </h1>
-      <img
-        className="page__shot"
-        src={image}
-        alt={`${title} screenshot`}
-        width={800}
-        height={450}
-      />
+      <ScreenshotCarousel title={title} shots={shots} orientation={orientation} />
       <p className="page__lead">
         What the project does, who it's for, and the most interesting problem you solved.
       </p>

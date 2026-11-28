@@ -1,11 +1,14 @@
-import { Building, Globe, Mail, MapPin } from 'lucide-react'
+import { Building, FileDown, Globe, Mail, MapPin } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { GithubIcon, InstagramIcon, LinkedinIcon } from './BrandIcons'
+import { RESUME_FILENAME, RESUME_URL } from './resume'
 
 interface Channel {
   label: string
   value: string
   href?: string
+  /** Set to make the link download a file instead of opening it. */
+  download?: string
   icon: ReactNode
 }
 
@@ -33,9 +36,16 @@ const CHANNELS: Channel[] = [
   },
   {
     label: 'Website',
-    value: 'joenelseve.vercel.app',
-    href: 'https://joenelseve.vercel.app/',
+    value: 'seve-eosin.vercel.app/about',
+    href: 'https://seve-eosin.vercel.app/about',
     icon: <Globe size={18} />,
+  },
+  {
+    label: 'Resume',
+    value: 'Download PDF',
+    href: RESUME_URL,
+    download: RESUME_FILENAME,
+    icon: <FileDown size={18} />,
   },
   { label: 'Work', value: 'Dynamic VARS', icon: <Building size={18} /> },
   { label: 'Location', value: 'Cavite, Philippines', icon: <MapPin size={18} /> },
@@ -67,6 +77,7 @@ export function Contact() {
                 <a
                   className="contact-card"
                   href={channel.href}
+                  download={channel.download}
                   {...(external ? { target: '_blank', rel: 'noreferrer' } : {})}
                 >
                   {body}

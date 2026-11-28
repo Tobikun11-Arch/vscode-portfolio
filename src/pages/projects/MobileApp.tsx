@@ -1,10 +1,12 @@
 import { ProjectPage } from './ProjectPage'
+import { PROJECT_SHOTS } from './shots'
 
 export function MobileApp() {
   return (
     <ProjectPage
       title="Mobile app"
-      image="/placeholders/mobile-app.svg"
+      shots={PROJECT_SHOTS['mobile-app']}
+      orientation="portrait"
       tech={['React Native', 'Expo', 'TypeScript']}
     />
   )

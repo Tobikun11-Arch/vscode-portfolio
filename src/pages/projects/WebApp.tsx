@@ -1,10 +1,11 @@
 import { ProjectPage } from './ProjectPage'
+import { PROJECT_SHOTS } from './shots'
 
 export function WebApp() {
   return (
     <ProjectPage
       title="Web app"
-      image="/placeholders/web-app.svg"
+      shots={PROJECT_SHOTS['web-app']}
       tech={['React', 'TypeScript', 'Node.js']}
     />
   )

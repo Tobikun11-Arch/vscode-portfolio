@@ -39,6 +39,28 @@
   color: #d4d4d4;
 }
 
+.page .page__button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 4px;
+  background: #0e639c;
+  color: #ffffff;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.page .page__button:hover {
+  background: #1177bb;
+  color: #ffffff;
+}
+
+.page .page__button:focus-visible {
+  outline: 1px solid #007fd4;
+  outline-offset: 2px;
+}
+
 .page__muted {
   color: #8b949e;
   font-weight: normal;
@@ -284,5 +306,211 @@ a.contact-card .contact-card__value {
   .page__skills > div {
     grid-template-columns: 1fr;
     gap: 6px;
+  }
+}
+
+/* ---------- Project screenshot carousel ---------- */
+.carousel {
+  margin: 8px 0 20px;
+  container-type: inline-size;
+}
+
+.carousel__viewport {
+  position: relative;
+}
+
+.carousel__track {
+  --gap: 12px;
+  display: flex;
+  gap: var(--gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  border-radius: 6px;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.carousel__track::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel__track:focus-visible {
+  outline: 2px solid #4daafc;
+  outline-offset: 3px;
+}
+
+.carousel__track.is-dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  scroll-behavior: auto;
+}
+
+.carousel__slide {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+.carousel__slide img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  border: 1px solid #2b2b2b;
+  background: #252526;
+  pointer-events: none;
+}
+
+/* Phone screens: three side by side, with the next one peeking in on narrow panes. */
+.carousel--portrait .carousel__slide {
+  flex-basis: min(calc((100% - 2 * var(--gap)) / 3), 220px);
+}
+
+@container (max-width: 520px) {
+  .carousel--portrait .carousel__slide {
+    flex-basis: min(62%, 220px);
+  }
+}
+
+.carousel__arrow {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid #3c3c3c;
+  border-radius: 50%;
+  background: rgb(30 30 30 / 0.88);
+  color: #e6e6e6;
+  cursor: pointer;
+  translate: 0 -50%;
+  transition:
+    opacity 160ms ease,
+    background-color 160ms ease,
+    scale 120ms ease;
+}
+
+.carousel__arrow--prev {
+  left: 10px;
+}
+
+.carousel__arrow--next {
+  right: 10px;
+}
+
+.carousel__arrow:hover {
+  background: #2d2d2d;
+}
+
+.carousel__arrow:active {
+  scale: 0.94;
+}
+
+.carousel__arrow:focus-visible {
+  outline: 2px solid #4daafc;
+  outline-offset: 2px;
+}
+
+.carousel__arrow:disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Touch visitors swipe; the arrows would only cover the screenshot. */
+@media (hover: none) {
+  .carousel__arrow {
+    display: none;
+  }
+}
+
+.carousel__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+  min-height: 24px;
+}
+
+.carousel__caption {
+  margin: 0;
+  font-size: 13px;
+  color: #8b949e;
+}
+
+.carousel__nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.carousel__count {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: #8b949e;
+  font-variant-numeric: tabular-nums;
+}
+
+.carousel__dots {
+  display: flex;
+}
+
+.carousel__dot {
+  position: relative;
+  width: 18px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.carousel__dot::after {
+  content: '';
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  background: #4a4a4a;
+  translate: -50% -50%;
+  transition:
+    width 200ms ease,
+    background-color 200ms ease;
+}
+
+.carousel__dot:hover::after {
+  background: #6e6e6e;
+}
+
+.carousel__dot.is-active::after {
+  width: 16px;
+  background: #4daafc;
+}
+
+.carousel__dot:focus-visible {
+  outline: 2px solid #4daafc;
+  outline-offset: -2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel__track {
+    scroll-behavior: auto;
+  }
+
+  .carousel__arrow,
+  .carousel__dot::after {
+    transition: none;
   }
 }

@@ -32,7 +32,7 @@ describe('resume content', () => {
   it('about shows my real profile photo', () => {
     renderPage(About)
     const photo = screen.getByRole('img', { name: /joenel/i })
-    expect(photo).toHaveAttribute('src', '/profile.jpg')
+    expect(photo).toHaveAttribute('src', '/profile.png')
     expect(photo).toHaveAttribute('width', '400')
     expect(photo).toHaveAttribute('height', '400')
   })
@@ -61,7 +61,8 @@ describe('resume content', () => {
     expectLink('github', 'https://github.com/Tobikun11-Arch')
     expectLink('linkedin', 'https://www.linkedin.com/in/joenel-sevellejo-2919a7259')
     expectLink('instagram', 'https://www.instagram.com/joenelsevellejo11')
-    expectLink('website', 'https://joenelseve.vercel.app/')
+    expectLink('website', 'https://seve-eosin.vercel.app/about')
+    expectLink('resume', '/Joenel-Sevellejo-Resume.pdf')
     expect(screen.getByText('Dynamic VARS')).toBeInTheDocument()
     expect(screen.getByText('Cavite, Philippines')).toBeInTheDocument()
   })
