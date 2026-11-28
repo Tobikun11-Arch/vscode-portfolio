@@ -40,7 +40,21 @@ export interface Project {
   banners: Banner[]
 }
 
-const s = (file: string, label: string): Screen => ({ file, label })
+/** Screenshots that exist in /public/projects/ (as .webp). */
+const READY = new Set([
+  'donclaudios-1', 'donclaudios-1-phone', 'donclaudios-2', 'donclaudios-3-phone', 'donclaudios-4',
+  'dyc-1', 'dyc-3', 'dyc-6',
+  'dynamail-1', 'dynamail-2', 'dynamail-5',
+  'saju-1', 'saju-2', 'saju-4',
+  'titlefusion-1', 'titlefusion-1-phone', 'titlefusion-2', 'titlefusion-4',
+  'dvars-1', 'dvars-1-phone',
+  'customerapp-1', 'customerapp-2', 'customerapp-3', 'customerapp-4', 'customerapp-5', 'customerapp-6', 'customerapp-7', 'customerapp-8', 'customerapp-9',
+  'clovars-1', 'clovars-2', 'clovars-3', 'clovars-6',
+  'vanora-1', 'vanora-2', 'vanora-3', 'vanora-4', 'vanora-5', 'vanora-6', 'vanora-7', 'vanora-8',
+])
+
+const s = (file: string, label: string): Screen =>
+  READY.has(file) ? { file, label, src: `/projects/${file}.webp` } : { file, label }
 
 export const PROJECTS: Project[] = [
   // ---------------- Web ----------------
@@ -100,52 +114,17 @@ export const PROJECTS: Project[] = [
       {
         headline: 'A back office for agencies that bill by the hour.',
         caption: 'Invoices, payments, expenses and payroll in one workspace per agency.',
-        screens: [s('dyc-2', 'Owner home')],
+        screens: [s('dyc-1', 'Landing page')],
       },
       {
-        headline: 'Invoices in a few clicks.',
-        caption: 'Line items, customers and a shareable link clients open without signing in.',
-        screens: [s('dyc-3', 'Invoice editor')],
+        headline: 'Every invoice, at a glance.',
+        caption: 'See what is overdue, unpaid and paid, then send a link clients open without signing in.',
+        screens: [s('dyc-3', 'Invoices list')],
       },
       {
         headline: 'Payslips and leave, without the spreadsheet.',
         caption: 'Employees see their payslips and leave status. Owners approve from the same app.',
         screens: [s('dyc-6', 'Employee home')],
-      },
-    ],
-  },
-  {
-    id: 'fullturns',
-    kind: 'web',
-    name: 'Full Turns LLC',
-    accent: '#f08c00',
-    summary:
-      'A website and ordering system for a company that turns over rental units: renovation, refinishing, painting, cleaning and maintenance. Property managers book and follow jobs, and admins manage orders, services and the blog.',
-    url: { href: 'https://full-turn-llc.vercel.app', label: 'full-turn-llc.vercel.app' },
-    repo: 'https://github.com/LinkPoint-Digital-Services/full-turns-llc',
-    highlights: [
-      'Public site with services, an about page and a blog',
-      'Property-manager dashboard for booking and tracking turnover orders',
-      'Admin dashboard for orders, services, blog posts, scheduling buffers and data backups',
-      'Forms validated with React Hook Form and Zod, tables with TanStack Table',
-    ],
-    tech: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Radix UI', 'TanStack Query', 'React Hook Form', 'Zod', 'Express'],
-    banners: [
-      {
-        headline: 'Unit turnovers, booked online.',
-        caption: 'Property managers book renovation, painting and cleaning, then follow every job.',
-        screens: [s('fullturns-1', 'Home page')],
-        phone: s('fullturns-1-phone', 'Home page on a phone'),
-      },
-      {
-        headline: 'Every order in one table.',
-        caption: 'Admins update and export orders, services and blog posts.',
-        screens: [s('fullturns-3', 'Admin orders')],
-      },
-      {
-        headline: 'A dashboard for property managers.',
-        caption: 'Book a turnover and see where each unit stands.',
-        screens: [s('fullturns-4', 'Property-manager dashboard')],
       },
     ],
   },
@@ -168,12 +147,12 @@ export const PROJECTS: Project[] = [
       {
         headline: 'Cold email and CRM in one place.',
         caption: 'Find prospects, send campaigns and follow every reply without switching tools.',
-        screens: [s('dynamail-2', 'Cold email campaigns')],
+        screens: [s('dynamail-1', 'Landing page')],
       },
       {
-        headline: 'Every contact, every deal.',
-        caption: 'Deals, tasks, notes and appointments live on each contact.',
-        screens: [s('dynamail-3', 'CRM prospects')],
+        headline: 'Campaigns in three steps.',
+        caption: 'Import leads from a CSV or the CRM, build the sequence, then review and send.',
+        screens: [s('dynamail-2', 'Cold email outreach')],
       },
       {
         headline: 'Replies land in one inbox.',
@@ -217,46 +196,13 @@ export const PROJECTS: Project[] = [
     ],
   },
   {
-    id: 'drizzy',
-    kind: 'web',
-    name: 'Drizzy Movies',
-    accent: '#e03131',
-    summary:
-      'A movie and TV discovery app built on the TMDB API. It shows trending, top-rated and upcoming titles, with trailers, full cast lists and similar titles for each one.',
-    url: { href: 'https://drizzy-movies.vercel.app', label: 'drizzy-movies.vercel.app' },
-    repo: 'https://github.com/Tobikun11-Arch/Drizzy-Db',
-    highlights: [
-      'Search across movies and TV shows',
-      'Trailers, full cast and similar titles on every detail page',
-      'Lazy-loaded posters and a responsive layout',
-    ],
-    tech: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'TMDB API'],
-    banners: [
-      {
-        headline: 'Find something to watch tonight.',
-        caption: 'Trending, top-rated and upcoming movies and shows, live from TMDB.',
-        screens: [s('drizzy-1', 'Home')],
-        phone: s('drizzy-1-phone', 'Home on a phone'),
-      },
-      {
-        headline: 'Every title, every detail.',
-        caption: 'Trailers, the full cast and similar titles on one page.',
-        screens: [s('drizzy-2', 'Movie detail')],
-      },
-      {
-        headline: 'Search movies and shows.',
-        caption: 'Type a title and jump straight to it.',
-        screens: [s('drizzy-3', 'Search results')],
-      },
-    ],
-  },
-  {
     id: 'titlefusion',
     kind: 'web',
     name: 'Title Fusion',
+    role: 'International client',
     accent: '#364fc7',
     summary:
-      'The website for a title insurance and escrow company in Minnesota and Wisconsin. Clients order title work online, and staff update the site from a built-in page builder.',
+      'The website for a title insurance and escrow company in Minnesota and Wisconsin, built for an international client in the US. Clients order title work online, and staff update the site from a built-in page builder.',
     url: { href: 'https://www.titlefusionllc.com', label: 'titlefusionllc.com' },
     highlights: [
       'Order Title form that sends each request straight to the team by email',
@@ -303,16 +249,6 @@ export const PROJECTS: Project[] = [
         caption: 'Services, success stories and a blog for a VA referral agency.',
         screens: [s('dvars-1', 'Home page')],
         phone: s('dvars-1-phone', 'Home page on a phone'),
-      },
-      {
-        headline: 'Hiring starts on the site.',
-        caption: 'Virtual assistants apply through a form built into the website.',
-        screens: [s('dvars-4', 'Application form')],
-      },
-      {
-        headline: 'A CMS the team actually uses.',
-        caption: 'Pages, team members, testimonials and blog posts update without a developer.',
-        screens: [s('dvars-5', 'CMS builder')],
       },
     ],
   },
@@ -422,26 +358,26 @@ export const PROJECTS: Project[] = [
         caption: 'A verified community for van-lifers to meet, connect and travel together.',
         screens: [
           s('vanora-1', 'Get started'),
-          s('vanora-3', 'Home'),
-          s('vanora-4', 'Explore'),
+          s('vanora-3', 'Find a match'),
+          s('vanora-4', 'Explore news'),
         ],
       },
       {
         headline: 'Help with the build.',
-        caption: 'Guides, suppliers and a Q&A for van conversions.',
+        caption: 'An invite-only builder marketplace, and privacy controls that keep your campsite approximate.',
         screens: [
           s('vanora-2', 'Profile setup'),
           s('vanora-6', 'Builder help'),
-          s('vanora-5', 'Profile'),
+          s('vanora-8', 'Privacy and safety'),
         ],
       },
       {
         headline: 'Premium for the full-timers.',
         caption: 'Subscriptions unlock builder help and more.',
         screens: [
-          s('vanora-8', 'Dashboard'),
-          s('vanora-7', 'Membership'),
-          s('vanora-9', 'Chat'),
+          s('vanora-5', 'Profile'),
+          s('vanora-7', 'Vanora Premium'),
+          s('vanora-4', 'Explore news'),
         ],
       },
     ],

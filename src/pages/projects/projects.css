@@ -655,13 +655,14 @@
 /* Desktop: a small window floated over the MacBook */
 .banner__float {
   position: absolute;
-  bottom: 7cqw;
+  bottom: 4cqw;
   left: 0;
   z-index: 3;
-  width: 15cqw;
-  aspect-ratio: 4 / 3;
+  /* Matches the mini-timer window, which is taller than it is wide. */
+  width: 11cqw;
+  aspect-ratio: 180 / 219;
   overflow: hidden;
-  border-radius: 1cqw;
+  border-radius: 1.2cqw;
   background: #ffffff;
   box-shadow: 0 1.4cqw 3cqw rgb(0 0 0 / 0.22);
 }

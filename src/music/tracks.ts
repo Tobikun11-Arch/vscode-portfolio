@@ -17,6 +17,61 @@ export const PLAYLIST_NAME = "Joenel Playlist";
 
 export const TRACKS: Track[] = [
   {
+    id: 1775877096,
+    title: "Merry Christmas, Please Don't Call",
+    artist: "Bleachers",
+    album: "Merry Christmas, Please Don't Call - Single",
+    artwork:
+      "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ce/63/85/ce638513-9167-2a5c-2c4a-94b4c8f9f88f/198704216732_Cover.jpg/300x300bb.jpg",
+    preview:
+      "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/f9/cd/e4/f9cde42f-cb75-0596-f412-627135b69c89/mzaf_10298030632271674528.plus.aac.p.m4a",
+    link: "https://music.apple.com/ph/album/merry-christmas-please-dont-call/1775877095",
+  },
+  {
+    id: 1225759944,
+    title: "I Miss Those Days",
+    artist: "Bleachers",
+    album: "Gone Now",
+    artwork:
+      "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/41/01/6e/41016e46-a0ef-aaa6-3031-8bf0ff093c8e/886446448022.jpg/300x300bb.jpg",
+    preview:
+      "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/1b/8d/b3/1b8db354-ef8f-2e38-06c2-5a8cf22a532d/mzaf_3390242845242873229.plus.aac.p.m4a",
+    link: "https://music.apple.com/ph/album/i-miss-those-days/1225759934",
+  },
+  {
+    id: 1850019038,
+    title: "About You",
+    artist: "The 1975",
+    album: "Being Funny In A Foreign Language",
+    artwork:
+      "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/1f/c7/98/1fc7988e-0a39-5724-1390-e45246250e24/198704825934_Cover.jpg/300x300bb.jpg",
+    preview:
+      "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d0/8c/64/d08c6440-e727-10ab-589c-e36d5afea47e/mzaf_15879604028025493401.plus.aac.p.m4a",
+    link: "https://music.apple.com/ph/album/about-you/1850018862",
+  },
+  {
+    id: 1850019034,
+    title: "All I Need To Hear",
+    artist: "The 1975",
+    album: "Being Funny In A Foreign Language",
+    artwork:
+      "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/1f/c7/98/1fc7988e-0a39-5724-1390-e45246250e24/198704825934_Cover.jpg/300x300bb.jpg",
+    preview:
+      "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/34/a3/3e/34a33ea4-f4e3-8b82-2aeb-dd668694c6b9/mzaf_3727090802439143205.plus.aac.p.m4a",
+    link: "https://music.apple.com/ph/album/all-i-need-to-hear/1850018862",
+  },
+  {
+    id: 1440819287,
+    title: "Robbers",
+    artist: "The 1975",
+    album: "The 1975",
+    artwork:
+      "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/7f/3b/6e/7f3b6e0f-ac35-98ff-f27f-fc51db0efea4/13UAAIM67470.rgb.jpg/300x300bb.jpg",
+    preview:
+      "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/65/39/73/653973c2-449b-a3c8-dbd0-af97100545a7/mzaf_15794401609046687284.plus.aac.p.m4a",
+    link: "https://music.apple.com/ph/album/robbers/1440818989",
+  },
+  {
     id: 1766905828,
     title: "Multo",
     artist: "Cup of Joe",
